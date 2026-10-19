@@ -1,66 +1,54 @@
-export type EndingType = '-y' | '-i' | '-e' | '-ie' | '-a';
+export type AppTab = 'gender' | 'plural';
 
-export type WordCategory = 
-  | 'cafe_food'     // Кафе и еда
-  | 'city_transport'// Город и транспорт
-  | 'home_shopping' // Дом и покупки
-  | 'adjectives'    // Прилагательные
-  | 'exceptions';   // Исключения
+export type PluralSubMode = 'nouns' | 'adjectives' | 'phrases';
 
-export type GrammarRuleType = 
-  | 'adj_default'      // Прилагательное дефолт: -e
-  | 'adj_kg'           // Прилагательное на k/g: -ie
-  | 'noun_neuter'      // Существительное ср. род: -a
-  | 'noun_soft'        // Существительное шипящие/мягкие: -e
-  | 'noun_kg'          // Существительное на k/g: -i
-  | 'noun_hard'        // Существительное твердые: -y
-  | 'exception';       // Исключение
+export type GrammaticalGender = 'męski' | 'żeński' | 'nijaki';
 
-export interface PolishWord {
+export interface GenderWord {
+  id: string;
+  word: string;
+  translation: string;
+  gender: GrammaticalGender;
+  ruleExplanation: string;
+}
+
+export interface NounWord {
   id: string;
   singular: string;
   plural: string;
-  stem: string;
-  correctEnding: EndingType;
-  ruleType: GrammarRuleType;
-  category: WordCategory;
+  correctEnding: '-y' | '-i' | '-e' | '-a';
   translation: string;
-  gender: 'жен.' | 'ср.' | 'муж.' | 'прил.' | 'искл.';
-  ruleHint: string;
-  notes?: string;
-}
-
-export interface PolishPhrase {
-  id: string;
-  adjectiveSingular: string;
-  adjectivePlural: string;
-  adjectiveEnding: '-e' | '-ie';
-  adjectiveStem: string;
-  adjectiveRuleHint: string;
-
-  nounSingular: string;
-  nounPlural: string;
-  nounEnding: EndingType;
-  nounStem: string;
-  nounRuleHint: string;
-
-  translation: string;
-  fullPlural: string;
-  category: WordCategory;
+  ruleExplanation: string;
   isException?: boolean;
 }
 
-export interface UserStats {
+export interface AdjectiveWord {
+  id: string;
+  singular: string; // e.g. "nowy / nowa"
+  plural: string;   // e.g. "nowe"
+  correctEnding: '-e' | '-ie';
+  translation: string;
+  ruleExplanation: string;
+}
+
+export interface PhraseItem {
+  id: string;
+  adjSingular: string;
+  adjEnding: '-e' | '-ie';
+  adjExplanation: string;
+
+  nounSingular: string;
+  nounEnding: '-y' | '-i' | '-e' | '-a';
+  nounExplanation: string;
+
+  translation: string;
+  fullPlural: string;
+  isException?: boolean;
+}
+
+export interface AppStats {
   streak: number;
   bestStreak: number;
   totalAnswered: number;
   totalCorrect: number;
-  mistakeHistory: Record<string, {
-    wordId: string;
-    mistakeCount: number;
-    lastSeen: number;
-    wordText: string;
-  }>;
 }
-
-export type ActiveTab = 'sprint' | 'phrases' | 'words' | 'rules' | 'mistakes';
