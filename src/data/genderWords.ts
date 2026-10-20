@@ -1,31 +1,101 @@
 import type { GenderWord } from '../types';
 
-export const GENDER_RULES_SUMMARY = [
+export const GENDER_RULES_SHORT = [
   {
-    gender: 'Мужской (Męski)',
-    rule: 'Чаще всего оканчивается на твердый согласный',
-    examples: 'dom, stół, kubek, pies, student',
+    gender: 'Мужской род (Rodzaj męski)',
+    badge: 'ten',
+    color: 'sky',
+    icon: '🟦',
+    ending: 'Основа на СОГЛАСНЫЙ звук',
+    formula: 'слово оканчивается на согласный: -m, -ł, -k, -d, -t, -sz, -rz, -l...',
+    examples: [
+      { pl: 'dom', ru: 'дом' },
+      { pl: 'stół', ru: 'стол' },
+      { pl: 'pies', ru: 'собака (он)' },
+      { pl: 'kubek', ru: 'кружка' },
+      { pl: 'talerz', ru: 'тарелка (он)' },
+      { pl: 'samochód', ru: 'автомобиль' },
+    ],
+    exceptions: 'Лица мужского пола на -a (mężczyzna, tata, kolega) — грамматически мужской род!',
   },
   {
-    gender: 'Женский (Żeński)',
-    rule: 'Оканчивается на -a (реже на мягкий/отвердевший согласный)',
-    examples: 'kobieta, szkoła, kawa, noc, ulica',
+    gender: 'Женский род (Rodzaj żeński)',
+    badge: 'ta',
+    color: 'rose',
+    icon: '🟪',
+    ending: 'Окончание на -A или -IA / -JA',
+    formula: 'почти все слова на гласную -a, а также на -ia / -ja',
+    examples: [
+      { pl: 'kobieta', ru: 'женщина' },
+      { pl: 'szkoła', ru: 'школа' },
+      { pl: 'kawa', ru: 'кофе (она)' },
+      { pl: 'herbata', ru: 'чай (она)' },
+      { pl: 'kawiarnia', ru: 'кофейня (-ia)' },
+      { pl: 'restauracja', ru: 'ресторан (-ja)' },
+    ],
+    exceptions: 'Слова на мягкий/отвердевший согласный без -a: noc (ночь), dłoń (ладонь), twarz (лицо), kość (кость).',
   },
   {
-    gender: 'Средний (Nijaki)',
-    rule: 'Оканчивается на гласные -o, -e или -ę',
-    examples: 'okno, zdjęcie, morze, piwo, zwierzę',
+    gender: 'Средний род (Rodzaj nijaki)',
+    badge: 'to',
+    color: 'amber',
+    icon: '🟨',
+    ending: 'Окончания на -O, -E, -Ę (или -UM)',
+    formula: 'все слова на гласные -o, -e, носовую -ę или латинские на -um',
+    examples: [
+      { pl: 'okno', ru: 'окно (-o)' },
+      { pl: 'zdjęcie', ru: 'фотография (-e)' },
+      { pl: 'morze', ru: 'море (-e)' },
+      { pl: 'mleko', ru: 'молоко (-o)' },
+      { pl: 'zwierzę', ru: 'животное (-ę)' },
+      { pl: 'auto', ru: 'автомобиль (-o)' },
+    ],
+    exceptions: 'Заимствования на -um в ед. числе не склоняются: muzeum, centrum, liceum.',
+  },
+];
+
+export const GENDER_RULES_LONG = [
+  {
+    title: '1. Мужской род (Rodzaj męski) — местоимение «ten»',
+    rule: 'Подавляющее большинство неодушевленных предметов и одушевленных лиц мужского пола оканчивается на твердый, отвердевший или мягкий согласный звук.',
+    points: [
+      'Твердые согласные: ten dom (дом), ten stół (стол), ten samochód (машина), ten pies (собака), ten chleb (хлеб), ten student (студент).',
+      'Шипящие и отвердевшие согласные: ten talerz (тарелка — в польском муж. род!), ten kosz (корзина), ten klucz (ключ), ten garaż (гараж).',
+      'Мягкие согласные: ten dzień (день), ten koń (конь), ten hotel (отель).',
+      'Исключение по полу: существительные на -a, обозначающие мужчин (mężczyzna, tata, kolega, kierowca) являются мужским родом и согласуются с прилагательными мужского рода (dobry kierowca, ten mężczyzna).'
+    ],
+  },
+  {
+    title: '2. Женский род (Rodzaj żeński) — местоимение «ta»',
+    rule: 'Главным и наиболее надежным маркером женского рода в польском языке является окончание -a в единственном числе.',
+    points: [
+      'Стандартное окончание -a: ta kobieta (женщина), ta szkoła (школа), ta książka (книга), ta torba (сумка), ta woda (вода).',
+      'Обратите внимание на расхождения с русским: ta kawa (кофе — жен. род!), ta herbata (чай — жен. род!).',
+      'Окончания на -ia и -ja: ta kawiarnia (кофейня), ta restauracja (ресторан — жен. род!), ta stacja (станция), ta lekcja (урок — жен. род!).',
+      'Особая группа исключений (на согласный): группа старых существительных оканчивается на согласный звук, но относится к женскому роду: ta noc (ночь), ta dłoń (ладонь), ta twarz (лицо), ta kość (кость), ta miłość (любовь), ta podróż (путешествие).'
+    ],
+  },
+  {
+    title: '3. Средний род (Rodzaj nijaki) — местоимение «to»',
+    rule: 'Существительные среднего рода всегда оканчиваются на гласные -o, -e, носовую -ę или латинский суффикс -um.',
+    points: [
+      'Окончание на -o: to okno (окно), to mleko (молоко), to auto (автомобиль), to jabłko (яблоко), to piwo (пиво), to krzesło (стул), to biurko (письменный стол), to miasto (город), to kino (кино).',
+      'Окончание на -e: to zdjęcie (фотография), to morze (море), to danie (блюдо), to mieszkanie (квартира), to serce (сердце).',
+      'Окончание на -ę (носовая e): to zwierzę (животное), to imię (имя), to dziewczę (девочка), to kurczę (цыпленок).',
+      'Латинские заимствования на -um: to muzeum (музей), to centrum (центр), to liceum (лицей). В ед. ч. не склоняются (w muzeum, do muzeum).'
+    ],
   },
 ];
 
 export const GENDER_WORDS: GenderWord[] = [
-  // Мужской род (Męski)
+  // Мужской род
   {
     id: 'g-dom',
     word: 'dom',
     translation: 'дом',
     gender: 'męski',
     ruleExplanation: 'Мужской род: оканчивается на согласный "m".',
+    detail: 'Слово dom оканчивается на твердый согласный «m». В польском языке подавляющее большинство слов на согласный — мужского рода (ten dom).',
   },
   {
     id: 'g-stol',
@@ -33,6 +103,7 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'стол',
     gender: 'męski',
     ruleExplanation: 'Мужской род: оканчивается на согласный "ł".',
+    detail: 'Слово stół оканчивается на твердый согласный «ł». Неодушевленные предметы с основой на согласный относятся к мужскому роду (ten stół).',
   },
   {
     id: 'g-pies',
@@ -40,6 +111,7 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'собака',
     gender: 'męski',
     ruleExplanation: 'Мужской род: оканчивается на согласный "s".',
+    detail: 'Слово pies оканчивается на согласный «s». В польском языке pies — грамматически мужского рода (ten pies), в отличие от русского языка!',
   },
   {
     id: 'g-kubek',
@@ -47,13 +119,15 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'кружка',
     gender: 'męski',
     ruleExplanation: 'Мужской род: оканчивается на согласный "k".',
+    detail: 'Основа оканчивается на согласный «k». Все существительные такого типа принадлежат к мужскому роду (ten kubek).',
   },
   {
     id: 'g-samochod',
     word: 'samochód',
-    translation: 'автомобиль',
+    translation: 'автомобиль / машина',
     gender: 'męski',
     ruleExplanation: 'Мужской род: оканчивается на согласный "d".',
+    detail: 'Слово оканчивается на согласный «d». По-польски автомобиль — мужского рода (ten samochód).',
   },
   {
     id: 'g-talerz',
@@ -61,6 +135,7 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'тарелка',
     gender: 'męski',
     ruleExplanation: 'Мужской род: оканчивается на согласный "rz".',
+    detail: 'В польском языке «talerz» оканчивается на шипящий диграф «rz» и является мужским родом (ten talerz), в русском — тарелка (ж. р.).',
   },
   {
     id: 'g-kosz',
@@ -68,13 +143,15 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'корзина',
     gender: 'męski',
     ruleExplanation: 'Мужской род: оканчивается на согласный "sz".',
+    detail: 'Основа на шипящий согласный «sz». Относится к мужскому роду (ten kosz).',
   },
   {
     id: 'g-student',
     word: 'student',
     translation: 'студент',
     gender: 'męski',
-    ruleExplanation: 'Мужской род: оканчивается на согласный "t".',
+    ruleExplanation: 'Мужской род: лицо мужского пола, оканчивается на "t".',
+    detail: 'Одушевленное лицо мужского пола с окончанием на твердый согласный «t» (ten student).',
   },
   {
     id: 'g-chleb',
@@ -82,13 +159,7 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'хлеб',
     gender: 'męski',
     ruleExplanation: 'Мужской род: оканчивается на согласный "b".',
-  },
-  {
-    id: 'g-kot',
-    word: 'kot',
-    translation: 'кот',
-    gender: 'męski',
-    ruleExplanation: 'Мужской род: оканчивается на согласный "t".',
+    detail: 'Оканчивается на твердый согласный «b» — классический признак мужского рода (ten chleb).',
   },
   {
     id: 'g-komputer',
@@ -96,22 +167,17 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'компьютер',
     gender: 'męski',
     ruleExplanation: 'Мужской род: оканчивается на согласный "r".',
-  },
-  {
-    id: 'g-telefon',
-    word: 'telefon',
-    translation: 'телефон',
-    gender: 'męski',
-    ruleExplanation: 'Мужской род: оканчивается на согласный "n".',
+    detail: 'Заимствованное слово с суффиксом «-er» на согласный звук (ten komputer).',
   },
 
-  // Женский род (Żeński)
+  // Женский род
   {
     id: 'g-kobieta',
     word: 'kobieta',
     translation: 'женщина',
     gender: 'żeński',
     ruleExplanation: 'Женский род: оканчивается на букву "-a".',
+    detail: 'Окончание «-a» — главный маркер женского рода в польском языке (ta kobieta).',
   },
   {
     id: 'g-szkola',
@@ -119,6 +185,7 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'школа',
     gender: 'żeński',
     ruleExplanation: 'Женский род: оканчивается на букву "-a".',
+    detail: 'Окончание на «-a» после твердого «ł». Относится к женскому роду (ta szkoła).',
   },
   {
     id: 'g-ksiazka',
@@ -126,13 +193,15 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'книга',
     gender: 'żeński',
     ruleExplanation: 'Женский род: оканчивается на букву "-a".',
+    detail: 'Окончание «-a» указывает на женский род (ta książka).',
   },
   {
     id: 'g-kawa',
     word: 'kawa',
-    translation: 'кофе (напиток / чашка кофе)',
+    translation: 'кофе (напиток / порция)',
     gender: 'żeński',
     ruleExplanation: 'Женский род: оканчивается на букву "-a".',
+    detail: 'В польском языке «kawa» — женского рода (ta kawa, czarna kawa), в отличие от русского языка!',
   },
   {
     id: 'g-herbata',
@@ -140,6 +209,7 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'чай',
     gender: 'żeński',
     ruleExplanation: 'Женский род: оканчивается на букву "-a".',
+    detail: 'В польском языке слово «herbata» оканчивается на «-a» и является женским родом (ta herbata, ciepła herbata).',
   },
   {
     id: 'g-woda',
@@ -147,6 +217,7 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'вода',
     gender: 'żeński',
     ruleExplanation: 'Женский род: оканчивается на букву "-a".',
+    detail: 'Окончание «-a» определяет женский род (ta woda, zimna woda).',
   },
   {
     id: 'g-ulica',
@@ -154,20 +225,23 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'улица',
     gender: 'żeński',
     ruleExplanation: 'Женский род: оканчивается на букву "-a".',
+    detail: 'Окончание «-a» после отвердевшего «c» (ta ulica, długa ulica).',
   },
   {
     id: 'g-kawiarnia',
     word: 'kawiarnia',
     translation: 'кофейня',
     gender: 'żeński',
-    ruleExplanation: 'Женский род: оканчивается на "-ia".',
+    ruleExplanation: 'Женский род: мягкое окончание "-ia".',
+    detail: 'Слова на «-ia» обозначающие места и заведения — женского рода (ta kawiarnia).',
   },
   {
-    id: 'g-restauracja',
-    word: 'restauracja',
-    translation: 'ресторан',
+    id: 'g-noc',
+    word: 'noc',
+    translation: 'ночь',
     gender: 'żeński',
-    ruleExplanation: 'Женский род: оканчивается на "-ja".',
+    ruleExplanation: 'Женский род (исключение): оканчивается на согласный "c".',
+    detail: 'Особая группа существительных: оканчиваются на мягкий или отвердевший согласный, но относятся к женскому роду (ta noc, ciemna noc).',
   },
   {
     id: 'g-torba',
@@ -175,105 +249,96 @@ export const GENDER_WORDS: GenderWord[] = [
     translation: 'сумка',
     gender: 'żeński',
     ruleExplanation: 'Женский род: оканчивается на букву "-a".',
-  },
-  {
-    id: 'g-noc',
-    word: 'noc',
-    translation: 'ночь',
-    gender: 'żeński',
-    ruleExplanation: 'Женский род (исключение/особенность): оканчивается на отвердевший согласный "c".',
-  },
-  {
-    id: 'g-bulka',
-    word: 'bułka',
-    translation: 'булочка',
-    gender: 'żeński',
-    ruleExplanation: 'Женский род: оканчивается на букву "-a".',
+    detail: 'Стандартное окончание «-a» женского рода (ta torba).',
   },
 
-  // Средний род (Nijaki)
+  // Средний род
   {
     id: 'g-okno',
     word: 'okno',
     translation: 'окно',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-o".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-o".',
+    detail: 'Окончание «-o» — базовый маркер среднего рода (to okno, duże okno).',
   },
   {
     id: 'g-zdjecie',
     word: 'zdjęcie',
     translation: 'фотография',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-e".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-e".',
+    detail: 'Существительные с окончанием на «-e» принадлежат к среднему роду (to zdjęcie, stare zdjęcie).',
   },
   {
     id: 'g-mleko',
     word: 'mleko',
     translation: 'молоко',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-o".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-o".',
+    detail: 'Окончание на «-o» указывает на средний род (to mleko, świeże mleko).',
   },
   {
     id: 'g-morze',
     word: 'morze',
     translation: 'море',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-e".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-e".',
+    detail: 'Окончание на «-e» указывает на средний род (to morze, Bałtyckie morze).',
   },
   {
     id: 'g-ciasto',
     word: 'ciasto',
     translation: 'пирог / пирожное',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-o".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-o".',
+    detail: 'Окончание на «-o» определяет средний род (to ciasto, smaczne ciasto).',
   },
   {
     id: 'g-piwo',
     word: 'piwo',
     translation: 'пиво',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-o".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-o".',
+    detail: 'Окончание на «-o» среднего рода (to piwo, zimne piwo).',
   },
   {
     id: 'g-auto',
     word: 'auto',
     translation: 'автомобиль',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-o".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-o".',
+    detail: 'Заимствованное слово на «-o» относится к среднему роду (to auto, szybkie auto). В отличие от samochód (муж. род)!',
   },
   {
     id: 'g-jablko',
     word: 'jabłko',
     translation: 'яблоко',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-o".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-o".',
+    detail: 'Окончание на «-o» среднего рода (to jabłko, czerwone jabłko).',
   },
   {
     id: 'g-krzeslo',
     word: 'krzesło',
     translation: 'стул',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-o".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-o".',
+    detail: 'Окончание на «-o» среднего рода (to krzesło, wygodne krzesło).',
   },
   {
     id: 'g-mieszkanie',
     word: 'mieszkanie',
     translation: 'квартира',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-e".',
+    ruleExplanation: 'Средний род: оканчивается на гласную "-e".',
+    detail: 'Отглагольные существительные на «-nie» относятся к среднему роду (to mieszkanie, nowe mieszkanie). В русском — квартира (ж. р.).',
   },
   {
     id: 'g-zwierze',
     word: 'zwierzę',
     translation: 'животное',
     gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-ę".',
-  },
-  {
-    id: 'g-biurko',
-    word: 'biurko',
-    translation: 'письменный стол',
-    gender: 'nijaki',
-    ruleExplanation: 'Средний род: оканчивается на букву "-o".',
+    ruleExplanation: 'Средний род: оканчивается на носовую гласную "-ę".',
+    detail: 'Слова на носовую «-ę» (названия существ) всегда относятся к среднему роду (to zwierzę, małe zwierzę).',
   },
 ];

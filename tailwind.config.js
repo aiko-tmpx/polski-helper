@@ -9,17 +9,18 @@ export default {
     extend: {
       colors: {
         dark: {
-          950: '#000000',
-          900: '#09090b',
-          850: '#121214',
-          800: '#18181b',
-          700: '#27272a',
-          600: '#3f3f46',
-          500: '#52525b',
-          400: '#71717a',
-          300: '#a1a1aa',
-          200: '#d4d4d8',
-          100: '#f4f4f5',
+          950: '#0e0f12', // deep base background
+          900: '#141519', // main screen background
+          850: '#1b1c22', // card & panel background
+          800: '#23242c', // interactive elements & buttons
+          750: '#2b2c36', // button hover
+          700: '#343642', // borders
+          600: '#464856', // subtle borders
+          500: '#696b7b', // muted text
+          400: '#8e90a0', // secondary text
+          300: '#b8b9c6', // readable text
+          200: '#d9dae3', // soft white text
+          100: '#f1f2f7', // prominent headings
         }
       },
       keyframes: {
@@ -34,7 +35,7 @@ export default {
         }
       },
       animation: {
-        shake: 'shake 0.3s ease-in-out both',
+        shake: 'shake 0.25s ease-in-out both',
         fadeIn: 'fadeIn 0.15s ease-out forwards',
       }
     },
