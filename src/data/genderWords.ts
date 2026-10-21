@@ -4,8 +4,7 @@ export const GENDER_RULES_SHORT = [
   {
     gender: 'Мужской род (Rodzaj męski)',
     badge: 'ten',
-    color: 'sky',
-    icon: '🟦',
+    color: 'indigo',
     ending: 'Основа на СОГЛАСНЫЙ звук',
     formula: 'слово оканчивается на согласный: -m, -ł, -k, -d, -t, -sz, -rz, -l...',
     examples: [
@@ -22,7 +21,6 @@ export const GENDER_RULES_SHORT = [
     gender: 'Женский род (Rodzaj żeński)',
     badge: 'ta',
     color: 'rose',
-    icon: '🟪',
     ending: 'Окончание на -A или -IA / -JA',
     formula: 'почти все слова на гласную -a, а также на -ia / -ja',
     examples: [
@@ -39,7 +37,6 @@ export const GENDER_RULES_SHORT = [
     gender: 'Средний род (Rodzaj nijaki)',
     badge: 'to',
     color: 'amber',
-    icon: '🟨',
     ending: 'Окончания на -O, -E, -Ę (или -UM)',
     formula: 'все слова на гласные -o, -e, носовую -ę или латинские на -um',
     examples: [

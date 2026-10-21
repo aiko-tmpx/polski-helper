@@ -1,8 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import type { AppStats, GenderWord, GrammaticalGender } from '../types';
+import type { GenderWord, GrammaticalGender } from '../types';
 import { GENDER_WORDS } from '../data/genderWords';
-import { playSuccessSound, playErrorSound, triggerHaptic, speakPolish } from '../utils/audio';
-import { recordAnswer } from '../utils/storage';
+import { speakPolish } from '../utils/audio';
 import {
   Volume2,
   CheckCircle2,
@@ -10,60 +9,47 @@ import {
   ArrowRight,
   BookOpen,
   ArrowLeft,
-  Flame,
   Info,
 } from 'lucide-react';
 
 interface GenderModuleProps {
-  stats: AppStats;
-  setStats: React.Dispatch<React.SetStateAction<AppStats>>;
-  soundEnabled: boolean;
   onBackToMenu: () => void;
   onOpenRules: () => void;
 }
 
-const GENDER_OPTIONS: {
+interface GenderOptionConfig {
   id: GrammaticalGender;
-  icon: string;
   label: string;
-  subLabel: string;
   pronoun: string;
   hotkey: string;
-  colorBorder: string;
-}[] = [
+  mnemonicColor: string;
+}
+
+const GENDER_OPTIONS: GenderOptionConfig[] = [
   {
     id: 'męski',
-    icon: '🟦',
     label: 'Мужской',
-    subLabel: 'Męski',
     pronoun: 'ten',
     hotkey: '1',
-    colorBorder: 'border-sky-500/40 hover:border-sky-400',
+    mnemonicColor: 'text-indigo-600 dark:text-indigo-400',
   },
   {
     id: 'żeński',
-    icon: '🟪',
     label: 'Женский',
-    subLabel: 'Żeński',
     pronoun: 'ta',
     hotkey: '2',
-    colorBorder: 'border-rose-500/40 hover:border-rose-400',
+    mnemonicColor: 'text-rose-600 dark:text-rose-400',
   },
   {
     id: 'nijaki',
-    icon: '🟨',
     label: 'Средний',
-    subLabel: 'Nijaki',
     pronoun: 'to',
     hotkey: '3',
-    colorBorder: 'border-amber-500/40 hover:border-amber-400',
+    mnemonicColor: 'text-amber-600 dark:text-amber-400',
   },
 ];
 
 export const GenderModule: React.FC<GenderModuleProps> = ({
-  stats,
-  setStats,
-  soundEnabled,
   onBackToMenu,
   onOpenRules,
 }) => {
@@ -86,24 +72,12 @@ export const GenderModule: React.FC<GenderModuleProps> = ({
   const handleSelectGender = useCallback(
     (gender: GrammaticalGender) => {
       if (isAnswered) return;
-
       const correct = currentWord.gender === gender;
       setSelectedGender(gender);
       setIsAnswered(true);
       setIsCorrect(correct);
-
-      const updated = recordAnswer(correct, stats);
-      setStats(updated);
-
-      if (correct) {
-        playSuccessSound(soundEnabled);
-        triggerHaptic('success');
-      } else {
-        playErrorSound(soundEnabled);
-        triggerHaptic('error');
-      }
     },
-    [isAnswered, currentWord, stats, setStats, soundEnabled]
+    [isAnswered, currentWord]
   );
 
   // Keyboard navigation
@@ -131,154 +105,144 @@ export const GenderModule: React.FC<GenderModuleProps> = ({
     speakPolish(currentWord.word);
   };
 
+  const getGenderLabel = (g: GrammaticalGender) => {
+    if (g === 'męski') return 'Мужской род (ten)';
+    if (g === 'żeński') return 'Женский род (ta)';
+    return 'Средний род (to)';
+  };
+
   return (
-    <div className="w-full max-w-xl mx-auto px-4 py-4 flex flex-col gap-5 animate-fadeIn">
-      {/* Navigation Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-dark-700/80">
+    <div className="w-full max-w-xl mx-auto px-4 py-6 flex flex-col gap-6 animate-fadeIn">
+      {/* Top Navigation */}
+      <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
         <button
           onClick={onBackToMenu}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-dark-850 border border-dark-700 text-dark-200 hover:text-white hover:bg-dark-800 text-sm font-semibold active:scale-95 transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 transition-colors active:scale-95"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5" strokeWidth={1.75} />
           <span>В меню</span>
         </button>
 
-        {/* Streak */}
-        <div className="flex items-center gap-1.5 bg-dark-850 border border-dark-700/80 rounded-full px-3 py-1 text-xs font-bold text-amber-400">
-          <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-          <span>{stats.streak}</span>
-        </div>
-
-        {/* Rules button */}
         <button
           onClick={onOpenRules}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-dark-850 border border-dark-700 text-dark-200 hover:text-white hover:bg-dark-800 text-sm font-semibold active:scale-95 transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 transition-colors active:scale-95"
         >
-          <BookOpen className="w-4 h-4 text-sky-400" />
+          <BookOpen className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" strokeWidth={1.75} />
           <span>Правило</span>
         </button>
       </div>
 
-      {/* Main Flashcard */}
+      {/* Main Card */}
       <div
-        className={`relative bg-dark-850 border rounded-3xl p-6 sm:p-10 flex flex-col items-center justify-center text-center transition-all ${
+        className={`bg-white dark:bg-zinc-900/60 border rounded-2xl p-6 sm:p-8 flex flex-col items-center text-center transition-colors ${
           isAnswered
             ? isCorrect
-              ? 'border-emerald-500/50 shadow-sm'
-              : 'border-rose-500/50 shadow-sm'
-            : 'border-dark-700'
+              ? 'border-emerald-500/40 dark:border-emerald-500/30'
+              : 'border-rose-500/40 dark:border-rose-500/30'
+            : 'border-zinc-200 dark:border-zinc-800'
         }`}
       >
-        <span className="text-xs uppercase tracking-wider font-extrabold text-dark-400 mb-2">
-          Определите род слова:
+        <span className="text-[11px] uppercase tracking-wider font-medium text-zinc-400 dark:text-zinc-500 mb-2">
+          Определите род слова
         </span>
 
-        {/* Polish word - BIG font */}
-        <div className="flex items-center justify-center gap-3.5 mb-2">
-          <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight">
+        {/* Word + Audio */}
+        <div className="flex items-center justify-center gap-2.5 mb-1.5">
+          <h1 className="text-3xl sm:text-4xl font-semibold text-zinc-900 dark:text-zinc-100 tracking-tight">
             {currentWord.word}
           </h1>
           <button
             onClick={handlePronounce}
             title="Прослушать произношение"
-            className="p-2 rounded-xl bg-dark-800 text-dark-300 hover:text-white hover:bg-dark-750 active:scale-95 transition-all"
+            className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           >
-            <Volume2 className="w-5 h-5" />
+            <Volume2 className="w-4 h-4" strokeWidth={1.75} />
           </button>
         </div>
 
-        {/* Translation - BIG font */}
-        <p className="text-lg sm:text-xl text-dark-300 font-medium mb-6">
+        {/* Translation */}
+        <p className="text-sm sm:text-base text-zinc-500 dark:text-zinc-400 mb-6">
           {currentWord.translation}
         </p>
 
-        {/* Result state */}
+        {/* Feedback State */}
         {isAnswered && (
           <div className="w-full flex flex-col items-center gap-3 animate-fadeIn">
+            {/* Status chip */}
             <div
-              className={`flex items-center gap-2.5 px-4 py-2 rounded-2xl text-base font-bold ${
+              className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium border ${
                 isCorrect
-                  ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
-                  : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300'
+                  : 'border-rose-500/30 bg-rose-500/10 text-rose-800 dark:text-rose-300'
               }`}
             >
               {isCorrect ? (
-                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" strokeWidth={1.75} />
               ) : (
-                <XCircle className="w-5 h-5 text-rose-400" />
+                <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" strokeWidth={1.75} />
               )}
               <span>
-                {currentWord.word} &rarr;{' '}
-                <span className="underline decoration-2">
-                  {currentWord.gender === 'męski'
-                    ? 'Мужской род (ten / męski)'
-                    : currentWord.gender === 'żeński'
-                    ? 'Женский род (ta / żeński)'
-                    : 'Средний род (to / nijaki)'}
-                </span>
+                {currentWord.word} → {getGenderLabel(currentWord.gender)}
               </span>
             </div>
 
-            {/* Detailed Explanation on mistake */}
+            {/* Explanation on mistake */}
             {!isCorrect && (
-              <div className="w-full text-left p-4 rounded-2xl bg-dark-800 border border-dark-700 space-y-2 mt-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold uppercase text-white">
-                  <Info className="w-4 h-4 text-rose-400" />
-                  <span>Почему этот род?</span>
+              <div className="w-full text-left p-3.5 rounded-r-lg border-l-2 border-rose-500/70 bg-rose-500/5 dark:bg-rose-500/10 space-y-1.5 mt-1">
+                <div className="flex items-center gap-1.5 text-xs font-medium text-rose-700 dark:text-rose-300">
+                  <Info className="w-3.5 h-3.5 shrink-0" strokeWidth={1.75} />
+                  <span>Правило</span>
                 </div>
-                <p className="text-sm sm:text-base text-dark-200 leading-relaxed font-normal">
+                <p className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
                   {currentWord.detail}
                 </p>
-                <div className="pt-1 flex justify-end">
+                <div className="pt-0.5">
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onOpenRules();
-                    }}
-                    className="text-xs text-white underline font-semibold hover:text-dark-200"
+                    onClick={onOpenRules}
+                    className="text-xs text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 underline transition-colors"
                   >
-                    Посмотреть полное правило &rarr;
+                    Посмотреть полное правило →
                   </button>
                 </div>
               </div>
             )}
 
             {/* Next Word Button */}
-            <div className="mt-3 flex items-center justify-center">
+            <div className="mt-3 flex flex-col items-center gap-1">
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleNextWord();
-                }}
-                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-black font-black text-sm hover:bg-dark-200 active:scale-95 transition-all shadow-md"
+                onClick={handleNextWord}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-white text-sm font-medium transition-colors shadow-xs active:scale-98"
               >
-                <span>Следующее слово</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>Дальше</span>
+                <ArrowRight className="w-4 h-4" strokeWidth={1.75} />
               </button>
+              <span className="text-[11px] text-zinc-400 dark:text-zinc-500 font-mono">
+                Пробел или Enter
+              </span>
             </div>
-            <p className="text-xs text-dark-400 mt-0.5">
-              или нажмите клавишу Пробел / Enter
-            </p>
           </div>
         )}
       </div>
 
-      {/* 3 Answer Buttons - with Icons and Colors */}
-      <div className="grid grid-cols-3 gap-3">
-        {GENDER_OPTIONS.map(({ id, icon, label, subLabel, pronoun, hotkey, colorBorder }) => {
+      {/* Answer Options */}
+      <div className="grid grid-cols-3 gap-2.5">
+        {GENDER_OPTIONS.map(({ id, label, pronoun, hotkey, mnemonicColor }) => {
           const isSelected = selectedGender === id;
           const isRight = currentWord.gender === id;
 
-          let btnClass = `bg-dark-850 border ${colorBorder} text-dark-100 hover:bg-dark-800 active:scale-95`;
+          let btnState =
+            'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 text-zinc-900 dark:text-zinc-100';
 
           if (isAnswered) {
             if (isRight) {
-              btnClass =
-                'bg-emerald-600 border-emerald-400 text-white font-bold ring-2 ring-emerald-500/30';
+              btnState =
+                'border-emerald-500/60 bg-emerald-500/10 text-emerald-950 dark:text-emerald-200';
             } else if (isSelected && !isCorrect) {
-              btnClass = 'bg-rose-600 border-rose-400 text-white font-bold';
+              btnState =
+                'border-rose-500/60 bg-rose-500/10 text-rose-950 dark:text-rose-200';
             } else {
-              btnClass = 'bg-dark-900 border-dark-800 text-dark-500 opacity-30';
+              btnState =
+                'border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-600 opacity-40';
             }
           }
 
@@ -287,12 +251,17 @@ export const GenderModule: React.FC<GenderModuleProps> = ({
               key={id}
               onClick={() => handleSelectGender(id)}
               disabled={isAnswered}
-              className={`flex flex-col items-center justify-center py-5 px-2 rounded-2xl transition-all ${btnClass}`}
+              className={`relative flex flex-col items-center justify-center py-4 px-2 rounded-xl border transition-all text-center focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 active:scale-[0.98] ${btnState}`}
             >
-              <span className="text-lg mb-1">{icon}</span>
-              <span className="text-base sm:text-lg font-black">{label}</span>
-              <span className="text-xs text-dark-300 font-mono mt-0.5">[{pronoun}] {subLabel}</span>
-              <span className="text-[11px] text-dark-500 font-mono mt-1 hidden sm:inline">[{hotkey}]</span>
+              {/* Hotkey badge Linear-style */}
+              <kbd className="absolute top-2 right-2 px-1.5 py-0.5 text-[10px] font-mono rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-850 text-zinc-500 dark:text-zinc-400 leading-none">
+                {hotkey}
+              </kbd>
+
+              <span className="text-sm sm:text-base font-semibold">{label}</span>
+              <span className={`text-xs font-mono mt-0.5 ${mnemonicColor}`}>
+                {pronoun}
+              </span>
             </button>
           );
         })}

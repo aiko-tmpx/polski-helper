@@ -4,9 +4,9 @@ export const PLURAL_RULES_SHORT = [
   {
     category: 'Существительные: Средний род',
     ending: '-a',
-    badge: '🟡 [-a]',
+    badge: '-a',
     color: 'amber',
-    target: 'Слова на -o, -e, -ę в ед. числе ВСЕГДА получают -a',
+    target: 'Слова на -o, -e, -ę в ед. числе всегда получают -a',
     rule: 'Любое существительное среднего рода во множественном числе оканчивается на -a.',
     caution: 'Важно: даже если основа на k/g (jabłko, lusterko), средний род имеет приоритет: jabłka, lusterka!',
     examples: [
@@ -20,7 +20,7 @@ export const PLURAL_RULES_SHORT = [
   {
     category: 'Существительные: Шипящие, отвердевшие и мягкие',
     ending: '-e',
-    badge: '🟢 [-e]',
+    badge: '-e',
     color: 'emerald',
     target: 'Основы на sz, cz, rz, ż, c, dz, l или на -ia / -ja',
     rule: 'Шипящие, отвердевшие согласные и мягкие основы требуют окончания -e.',
@@ -37,7 +37,7 @@ export const PLURAL_RULES_SHORT = [
   {
     category: 'Существительные: Основы на K и G',
     ending: '-i',
-    badge: '🟣 [-i]',
+    badge: '-i',
     color: 'purple',
     target: 'Основы на согласные k и g (требуют смягчения)',
     rule: 'В польском языке сочетания «ky» и «gy» невозможны — k и g всегда требуют окончания -i.',
@@ -53,7 +53,7 @@ export const PLURAL_RULES_SHORT = [
   {
     category: 'Существительные: Обычные твердые согласные',
     ending: '-y',
-    badge: '🔵 [-y]',
+    badge: '-y',
     color: 'sky',
     target: 'Основы на твердые: b, d, f, ł, m, n, p, r, s, t, w, z',
     rule: 'После стандартных твердых согласных существительные получают окончание -y.',
@@ -70,7 +70,7 @@ export const PLURAL_RULES_SHORT = [
   {
     category: 'Прилагательные (rodzaj niemęskoosobowy)',
     ending: '-e / -ie',
-    badge: '🌸 [-e / -ie]',
+    badge: '-e / -ie',
     color: 'pink',
     target: 'Только 2 окончания: -ie (после k/g) и -e (во всех остальных случаях)',
     rule: 'Прилагательные имеют простейшую логику во мн. ч. niemęskoosobowy:',
@@ -86,7 +86,7 @@ export const PLURAL_RULES_SHORT = [
   {
     category: '4 Базовых исключения',
     ending: 'Искл.',
-    badge: '⚠️ [Исключения]',
+    badge: 'Исключения',
     color: 'yellow',
     target: 'Исторические формы и остатки двойственного числа парных органов',
     rule: 'Эти четыре слова нужно просто запомнить наизусть:',

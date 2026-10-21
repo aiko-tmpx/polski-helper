@@ -57,10 +57,3 @@ export interface PhraseItem {
   fullPlural: string;
   isException?: boolean;
 }
-
-export interface AppStats {
-  streak: number;
-  bestStreak: number;
-  totalAnswered: number;
-  totalCorrect: number;
-}
