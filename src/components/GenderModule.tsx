@@ -20,32 +20,28 @@ interface GenderModuleProps {
 interface GenderOptionConfig {
   id: GrammaticalGender;
   label: string;
-  pronoun: string;
+  subLabel: string;
   hotkey: string;
-  mnemonicColor: string;
 }
 
 const GENDER_OPTIONS: GenderOptionConfig[] = [
   {
     id: 'męski',
     label: 'Мужской',
-    pronoun: 'ten',
+    subLabel: 'Męski',
     hotkey: '1',
-    mnemonicColor: 'text-indigo-600 dark:text-indigo-400',
   },
   {
     id: 'żeński',
     label: 'Женский',
-    pronoun: 'ta',
+    subLabel: 'Żeński',
     hotkey: '2',
-    mnemonicColor: 'text-rose-600 dark:text-rose-400',
   },
   {
     id: 'nijaki',
     label: 'Средний',
-    pronoun: 'to',
+    subLabel: 'Nijaki',
     hotkey: '3',
-    mnemonicColor: 'text-amber-600 dark:text-amber-400',
   },
 ];
 
@@ -226,7 +222,7 @@ export const GenderModule: React.FC<GenderModuleProps> = ({
 
       {/* Answer Options */}
       <div className="grid grid-cols-3 gap-2.5">
-        {GENDER_OPTIONS.map(({ id, label, pronoun, hotkey, mnemonicColor }) => {
+        {GENDER_OPTIONS.map(({ id, label, subLabel, hotkey }) => {
           const isSelected = selectedGender === id;
           const isRight = currentWord.gender === id;
 
@@ -251,16 +247,15 @@ export const GenderModule: React.FC<GenderModuleProps> = ({
               key={id}
               onClick={() => handleSelectGender(id)}
               disabled={isAnswered}
-              className={`relative flex flex-col items-center justify-center py-4 px-2 rounded-xl border transition-all text-center focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 active:scale-[0.98] ${btnState}`}
+              className={`relative flex flex-col items-center justify-center py-5 sm:py-6 px-3 rounded-xl border transition-all text-center focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 active:scale-[0.98] ${btnState}`}
             >
-              {/* Hotkey badge Linear-style */}
-              <kbd className="absolute top-2 right-2 px-1.5 py-0.5 text-[10px] font-mono rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-850 text-zinc-500 dark:text-zinc-400 leading-none">
+              <kbd className="absolute top-2.5 right-2.5 min-w-[20px] h-5 flex items-center justify-center px-1.5 text-xs font-mono font-medium rounded border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 shadow-xs select-none">
                 {hotkey}
               </kbd>
 
-              <span className="text-sm sm:text-base font-semibold">{label}</span>
-              <span className={`text-xs font-mono mt-0.5 ${mnemonicColor}`}>
-                {pronoun}
+              <span className="text-base sm:text-lg font-semibold">{label}</span>
+              <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono mt-0.5">
+                {subLabel}
               </span>
             </button>
           );

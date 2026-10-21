@@ -320,13 +320,8 @@ export const PluralModule: React.FC<PluralModuleProps> = ({
           </div>
 
           {/* 4 Noun buttons */}
-          <div className="grid grid-cols-4 gap-2">
-            {[
-              { ending: '-y' as const, label: 'твердые' },
-              { ending: '-i' as const, label: 'после k, g' },
-              { ending: '-e' as const, label: 'мягк / шип' },
-              { ending: '-a' as const, label: 'ср. род' },
-            ].map(({ ending, label }, index) => {
+          <div className="grid grid-cols-4 gap-2.5">
+            {(['-y', '-i', '-e', '-a'] as const).map((ending, index) => {
               const isSelected = selectedNounEnding === ending;
               const isRight = currentNoun.correctEnding === ending;
 
@@ -351,15 +346,12 @@ export const PluralModule: React.FC<PluralModuleProps> = ({
                   key={ending}
                   onClick={() => handleSelectNounEnding(ending)}
                   disabled={isNounAnswered}
-                  className={`relative flex flex-col items-center justify-center py-4 px-1 rounded-xl border transition-all text-center focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 active:scale-[0.98] ${btnState}`}
+                  className={`relative flex flex-col items-center justify-center py-5 sm:py-6 px-2 rounded-xl border transition-all text-center focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 active:scale-[0.98] ${btnState}`}
                 >
-                  <kbd className="absolute top-2 right-2 px-1 py-0.5 text-[9px] font-mono rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-850 text-zinc-500 dark:text-zinc-400 leading-none">
+                  <kbd className="absolute top-2.5 right-2.5 min-w-[20px] h-5 flex items-center justify-center px-1.5 text-xs font-mono font-medium rounded border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 shadow-xs select-none">
                     {index + 1}
                   </kbd>
-                  <span className="text-lg sm:text-xl font-semibold">{ending}</span>
-                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono mt-0.5 hidden sm:inline">
-                    {label}
-                  </span>
+                  <span className="text-2xl sm:text-3xl font-semibold tracking-tight">{ending}</span>
                 </button>
               );
             })}
@@ -465,11 +457,8 @@ export const PluralModule: React.FC<PluralModuleProps> = ({
           </div>
 
           {/* 2 Adjective buttons */}
-          <div className="grid grid-cols-2 gap-2.5">
-            {[
-              { ending: '-e' as const, label: 'основное окончание (дефолт)' },
-              { ending: '-ie' as const, label: 'после k и g' },
-            ].map(({ ending, label }, index) => {
+          <div className="grid grid-cols-2 gap-3">
+            {(['-e', '-ie'] as const).map((ending, index) => {
               const isSelected = selectedAdjEnding === ending;
               const isRight = currentAdj.correctEnding === ending;
 
@@ -494,15 +483,12 @@ export const PluralModule: React.FC<PluralModuleProps> = ({
                   key={ending}
                   onClick={() => handleSelectAdjEnding(ending)}
                   disabled={isAdjAnswered}
-                  className={`relative flex flex-col items-center justify-center py-4 px-2 rounded-xl border transition-all text-center focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 active:scale-[0.98] ${btnState}`}
+                  className={`relative flex flex-col items-center justify-center py-5 sm:py-6 px-3 rounded-xl border transition-all text-center focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 active:scale-[0.98] ${btnState}`}
                 >
-                  <kbd className="absolute top-2 right-2 px-1.5 py-0.5 text-[10px] font-mono rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-855 text-zinc-500 dark:text-zinc-400 leading-none">
+                  <kbd className="absolute top-2.5 right-2.5 min-w-[20px] h-5 flex items-center justify-center px-1.5 text-xs font-mono font-medium rounded border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 shadow-xs select-none">
                     {index + 1}
                   </kbd>
-                  <span className="text-xl font-semibold">{ending}</span>
-                  <span className="text-xs text-zinc-400 dark:text-zinc-500 font-mono mt-0.5">
-                    {label}
-                  </span>
+                  <span className="text-2xl sm:text-3xl font-semibold tracking-tight">{ending}</span>
                 </button>
               );
             })}
