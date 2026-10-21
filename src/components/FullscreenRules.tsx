@@ -107,8 +107,8 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-1.5 gap-x-4 text-xs sm:text-sm">
                         {item.examples.map((ex, i) => (
                           <div key={i} className="flex items-baseline gap-1.5">
-                            <span className="font-medium text-zinc-900 dark:text-zinc-100">{ex.pl}</span>
-                            <span className="text-zinc-400 dark:text-zinc-500 text-xs">({ex.ru})</span>
+                            <span className="font-semibold text-zinc-900 dark:text-zinc-100">{ex.pl}</span>
+                            {ex.ru && <span className="text-zinc-400 dark:text-zinc-500 text-xs">({ex.ru})</span>}
                           </div>
                         ))}
                       </div>
@@ -220,12 +220,11 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                       <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1.5 font-medium">
                         Примеры:
                       </div>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-1.5 gap-x-4 text-xs sm:text-sm">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-2 gap-x-4 text-xs sm:text-sm">
                         {item.examples.map((ex, i) => (
-                          <div key={i} className="flex items-baseline gap-1.5">
+                          <div key={i} className="flex items-baseline gap-1.5 font-mono">
                             <span className="text-zinc-500 dark:text-zinc-400">{ex.sg} →</span>
-                            <span className="font-medium text-zinc-900 dark:text-zinc-100">{ex.pl}</span>
-                            <span className="text-zinc-400 dark:text-zinc-500 text-xs">({ex.ru})</span>
+                            <span className="font-semibold text-zinc-900 dark:text-zinc-100">{ex.pl}</span>
                           </div>
                         ))}
                       </div>
