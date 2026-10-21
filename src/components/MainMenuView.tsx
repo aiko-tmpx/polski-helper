@@ -114,7 +114,7 @@ export const MainMenuView: React.FC<MainMenuViewProps> = ({ onNavigate }) => {
                 Прилагательные
               </div>
               <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mt-0.5">
-                nowe, drogie (-e, -ie)
+                nowy → nowe, drogi → drogie
               </div>
             </div>
             <ChevronRight
