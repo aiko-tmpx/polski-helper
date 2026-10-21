@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import type { RulesMode } from '../types';
-import { GENDER_RULES_SHORT, GENDER_RULES_LONG, GENDER_WORDS } from '../data/genderWords';
-import { PLURAL_RULES_SHORT, PLURAL_RULES_LONG, NOUNS_DATA } from '../data/pluralWords';
-import { speakPolish } from '../utils/audio';
-import { ArrowLeft, Volume2 } from 'lucide-react';
+import { GENDER_RULES_SHORT, GENDER_RULES_LONG } from '../data/genderWords';
+import { PLURAL_RULES_SHORT, PLURAL_RULES_LONG } from '../data/pluralWords';
+import { ArrowLeft } from 'lucide-react';
 
 interface FullscreenRulesProps {
   type: 'gender' | 'plural';
@@ -146,36 +145,6 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                     </ul>
                   </section>
                 ))}
-
-                {/* Vocabulary with speech */}
-                <section className="p-5 sm:p-6 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-3 shadow-xs">
-                  <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                    Словарь модуля ({GENDER_WORDS.length})
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-80 overflow-y-auto pr-1">
-                    {GENDER_WORDS.map((w) => (
-                      <div
-                        key={w.id}
-                        className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-850/50 text-xs sm:text-sm"
-                      >
-                        <div>
-                          <span className="font-medium text-zinc-900 dark:text-zinc-100">{w.word}</span>{' '}
-                          <span className="text-zinc-400">({w.translation})</span>
-                          <div className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono uppercase mt-0.5">
-                            {w.gender}
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => speakPolish(w.word)}
-                          title="Прослушать произношение"
-                          className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200 dark:hover:bg-zinc-750 transition-colors"
-                        >
-                          <Volume2 className="w-3.5 h-3.5" strokeWidth={1.75} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </section>
               </div>
             )}
           </div>
@@ -247,35 +216,6 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                     </div>
                   </section>
                 ))}
-
-                {/* Vocabulary with speech */}
-                <section className="p-5 sm:p-6 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-3 shadow-xs">
-                  <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                    Словарь множественного числа ({NOUNS_DATA.length})
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-80 overflow-y-auto pr-1">
-                    {NOUNS_DATA.map((n) => (
-                      <div
-                        key={n.id}
-                        className="flex items-center justify-between p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-850/50 text-xs sm:text-sm"
-                      >
-                        <div>
-                          <div className="font-medium text-zinc-900 dark:text-zinc-100">
-                            {n.singular} → <span>{n.plural}</span>
-                          </div>
-                          <div className="text-xs text-zinc-400 dark:text-zinc-500">{n.translation}</div>
-                        </div>
-                        <button
-                          onClick={() => speakPolish(n.plural)}
-                          title="Прослушать произношение"
-                          className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-200 dark:hover:bg-zinc-750 transition-colors"
-                        >
-                          <Volume2 className="w-3.5 h-3.5" strokeWidth={1.75} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </section>
               </div>
             )}
           </div>
