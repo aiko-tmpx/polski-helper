@@ -3,7 +3,6 @@ import type { RulesMode } from '../types';
 import { GENDER_RULES_SHORT, GENDER_RULES_LONG } from '../data/genderWords';
 import {
   PLURAL_ALGORITHM_STEPS,
-  PLURAL_MATRIX_ROWS,
   PLURAL_TRAPS,
   PLURAL_ADJECTIVES_RULE,
   PLURAL_RULES_LONG,
@@ -168,21 +167,21 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
         {/* 2. PLURAL RULES */}
         {/* ========================================================= */}
         {type === 'plural' && (
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-6">
             {mode === 'short' ? (
-              <div className="space-y-5">
+              <div className="space-y-6">
                 {/* 1. Algorithm Flow Card */}
-                <section className="p-5 sm:p-6 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-4 shadow-xs">
-                  <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3">
+                <section className="p-6 sm:p-7 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-5 shadow-xs">
+                  <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3.5">
                     <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
                       Алгоритм выбора за 5 секунд
                     </h2>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                      Проверяйте слово сверху вниз (от частного к общему):
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                      Проверяйте слово сверху вниз:
                     </p>
                   </div>
 
-                  <div className="divide-y divide-zinc-100 dark:divide-zinc-800/80 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden bg-zinc-50/40 dark:bg-zinc-900/30">
+                  <div className="divide-y divide-zinc-100 dark:divide-zinc-800/80">
                     {PLURAL_ALGORITHM_STEPS.map((step) => {
                       const badgeClass =
                         step.ending === '-a'
@@ -196,39 +195,36 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                       return (
                         <div
                           key={step.step}
-                          className="p-3.5 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3"
+                          className="py-4 first:pt-1 last:pb-1 space-y-2"
                         >
-                          <div className="flex items-start gap-3">
-                            <span className="w-5 h-5 rounded flex items-center justify-center font-mono text-xs font-semibold bg-zinc-200/70 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 shrink-0 mt-0.5">
-                              {step.step}
-                            </span>
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                                  {step.condition}
-                                </span>
-                                <span className="text-xs font-mono text-zinc-400">→</span>
-                                <span
-                                  className={`px-2 py-0.5 rounded text-xs font-mono font-bold border ${badgeClass}`}
-                                >
-                                  {step.ending}
-                                </span>
-                              </div>
-                              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                                {step.subtext}
-                              </p>
+                          {/* Top Line: Step number + condition on left, ending on right */}
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <span className="w-5 h-5 rounded flex items-center justify-center font-mono text-xs font-semibold bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 shrink-0">
+                                {step.step}
+                              </span>
+                              <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                {step.condition}
+                              </span>
                             </div>
+
+                            <span
+                              className={`px-2.5 py-0.5 rounded text-xs font-mono font-bold border shrink-0 ${badgeClass}`}
+                            >
+                              {step.ending}
+                            </span>
                           </div>
 
-                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 md:justify-end text-xs font-mono text-zinc-600 dark:text-zinc-400 shrink-0 pl-8 md:pl-0">
+                          {/* Bottom Line: Clean examples with breathing room */}
+                          <div className="pl-7.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-mono text-zinc-500 dark:text-zinc-400">
                             {step.examples.map((ex, i) => (
                               <span key={i} className="inline-flex items-baseline">
                                 {ex.sg} →{' '}
-                                <span className="font-semibold text-zinc-900 dark:text-zinc-100 ml-0.5">
+                                <span className="font-semibold text-zinc-900 dark:text-zinc-100 ml-1">
                                   {ex.pl}
                                 </span>
                                 {i < step.examples.length - 1 && (
-                                  <span className="text-zinc-300 dark:text-zinc-700 mx-1.5">•</span>
+                                  <span className="text-zinc-300 dark:text-zinc-700 ml-4">•</span>
                                 )}
                               </span>
                             ))}
@@ -239,71 +235,14 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                   </div>
                 </section>
 
-                {/* 2. Matrix Table */}
-                <section className="p-5 sm:p-6 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-4 shadow-xs">
-                  <div>
-                    <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-                      Сводная таблица окончаний
-                    </h2>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-                      Матрица распределения согласных основ:
-                    </p>
-                  </div>
-
-                  <div className="border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-xs sm:text-sm">
-                        <thead className="bg-zinc-100/70 dark:bg-zinc-800/60 text-zinc-600 dark:text-zinc-400 font-medium border-b border-zinc-200 dark:border-zinc-800">
-                          <tr>
-                            <th className="py-2.5 px-3.5 w-16">Оконч.</th>
-                            <th className="py-2.5 px-3.5 w-44">Категория</th>
-                            <th className="py-2.5 px-3.5">Основы и маркеры</th>
-                            <th className="py-2.5 px-3.5">Примеры</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                          {PLURAL_MATRIX_ROWS.map((row) => (
-                            <tr
-                              key={row.ending}
-                              className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors"
-                            >
-                              <td className="py-3 px-3.5 align-top">
-                                <span className="font-mono font-bold text-sm text-zinc-900 dark:text-zinc-100">
-                                  {row.ending}
-                                </span>
-                              </td>
-                              <td className="py-3 px-3.5 align-top font-medium text-zinc-900 dark:text-zinc-100">
-                                {row.category}
-                              </td>
-                              <td className="py-3 px-3.5 align-top text-zinc-600 dark:text-zinc-400 leading-relaxed text-xs">
-                                {row.markers}
-                              </td>
-                              <td className="py-3 px-3.5 align-top font-mono text-xs text-zinc-600 dark:text-zinc-400 whitespace-nowrap">
-                                {row.examples.map((ex, i) => (
-                                  <div key={i}>
-                                    {ex.sg} →{' '}
-                                    <span className="font-semibold text-zinc-900 dark:text-zinc-100">
-                                      {ex.pl}
-                                    </span>
-                                  </div>
-                                ))}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </section>
-
-                {/* 3. Traps Callout */}
-                <div className="p-4 sm:p-5 rounded-r-xl border-l-2 border-amber-500/80 bg-amber-500/5 dark:bg-amber-500/10 space-y-3">
+                {/* 2. Traps Callout */}
+                <div className="p-5 sm:p-6 rounded-r-xl border-l-2 border-amber-500/80 bg-amber-500/5 dark:bg-amber-500/10 space-y-3.5">
                   <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-800 dark:text-amber-400">
                     <AlertCircle className="w-4 h-4 shrink-0" strokeWidth={1.75} />
                     <span>3 главные ловушки</span>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     {PLURAL_TRAPS.map((trap, i) => (
                       <div key={i} className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
                         <span className="font-semibold text-zinc-900 dark:text-zinc-100 mr-1.5">
@@ -315,8 +254,8 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                   </div>
                 </div>
 
-                {/* 4. Adjectives */}
-                <section className="p-4 sm:p-5 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-2.5 shadow-xs">
+                {/* 3. Adjectives */}
+                <section className="p-5 sm:p-6 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-3 shadow-xs">
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                       {PLURAL_ADJECTIVES_RULE.title}
@@ -330,7 +269,7 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                     {PLURAL_ADJECTIVES_RULE.rule}
                   </p>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-xs text-zinc-600 dark:text-zinc-400">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1.5 font-mono text-xs text-zinc-600 dark:text-zinc-400">
                     {PLURAL_ADJECTIVES_RULE.examples.map((ex, i) => (
                       <div key={i} className="flex items-baseline gap-1">
                         <span>{ex.sg} →</span>

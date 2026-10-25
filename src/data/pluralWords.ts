@@ -4,27 +4,24 @@ export interface PluralAlgorithmStep {
   step: number;
   condition: string;
   ending: '-a' | '-i' | '-e' | '-y';
-  subtext: string;
   examples: { sg: string; pl: string }[];
 }
 
 export const PLURAL_ALGORITHM_STEPS: PluralAlgorithmStep[] = [
   {
     step: 1,
-    condition: 'Средний род (to)?',
+    condition: 'Средний род (to)',
     ending: '-a',
-    subtext: 'Слова на -o, -e, -ę (абсолютный приоритет, даже если основа на k/g)',
     examples: [
       { sg: 'okno', pl: 'okna' },
       { sg: 'morze', pl: 'morza' },
-      { sg: 'jabłko', pl: 'jabłka' },
+      { sg: 'auto', pl: 'auta' },
     ],
   },
   {
     step: 2,
-    condition: 'Основа на K или G?',
+    condition: 'Основа на K или G',
     ending: '-i',
-    subtext: 'В польском нет «ky» и «gy» — строго смягчение в -i',
     examples: [
       { sg: 'książka', pl: 'książki' },
       { sg: 'noga', pl: 'nogi' },
@@ -33,9 +30,8 @@ export const PLURAL_ALGORITHM_STEPS: PluralAlgorithmStep[] = [
   },
   {
     step: 3,
-    condition: 'ШИПИТ / МЯГКОЕ / ЛЬ / C?',
+    condition: 'Шипящие, мягкие, L и C',
     ending: '-e',
-    subtext: 'Шипящие (sz, cz, rz, ż), мягкие (ń, ś, ć, ź), мягкая L и цокающие c, dz',
     examples: [
       { sg: 'klucz', pl: 'klucze' },
       { sg: 'ulica', pl: 'ulice' },
@@ -44,9 +40,8 @@ export const PLURAL_ALGORITHM_STEPS: PluralAlgorithmStep[] = [
   },
   {
     step: 4,
-    condition: 'Всё остальное (твердое)?',
+    condition: 'Все остальные (твердые)',
     ending: '-y',
-    subtext: 'Обычные твердые согласные основы (включая твердую перечеркнутую Ł)',
     examples: [
       { sg: 'dom', pl: 'domy' },
       { sg: 'stół', pl: 'stoły' },
