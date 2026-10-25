@@ -1,5 +1,145 @@
 import type { NounWord, AdjectiveWord, PhraseItem } from '../types';
 
+export interface PluralAlgorithmStep {
+  step: number;
+  condition: string;
+  ending: '-a' | '-i' | '-e' | '-y';
+  subtext: string;
+  examples: { sg: string; pl: string }[];
+}
+
+export const PLURAL_ALGORITHM_STEPS: PluralAlgorithmStep[] = [
+  {
+    step: 1,
+    condition: 'Средний род (to)?',
+    ending: '-a',
+    subtext: 'Слова на -o, -e, -ę (абсолютный приоритет, даже если основа на k/g)',
+    examples: [
+      { sg: 'okno', pl: 'okna' },
+      { sg: 'morze', pl: 'morza' },
+      { sg: 'jabłko', pl: 'jabłka' },
+    ],
+  },
+  {
+    step: 2,
+    condition: 'Основа на K или G?',
+    ending: '-i',
+    subtext: 'В польском нет «ky» и «gy» — строго смягчение в -i',
+    examples: [
+      { sg: 'książka', pl: 'książki' },
+      { sg: 'noga', pl: 'nogi' },
+      { sg: 'kubek', pl: 'kubki' },
+    ],
+  },
+  {
+    step: 3,
+    condition: 'ШИПИТ / МЯГКОЕ / ЛЬ / C?',
+    ending: '-e',
+    subtext: 'Шипящие (sz, cz, rz, ż), мягкие (ń, ś, ć, ź), мягкая L и цокающие c, dz',
+    examples: [
+      { sg: 'klucz', pl: 'klucze' },
+      { sg: 'ulica', pl: 'ulice' },
+      { sg: 'hotel', pl: 'hotele' },
+    ],
+  },
+  {
+    step: 4,
+    condition: 'Всё остальное (твердое)?',
+    ending: '-y',
+    subtext: 'Обычные твердые согласные основы (включая твердую перечеркнутую Ł)',
+    examples: [
+      { sg: 'dom', pl: 'domy' },
+      { sg: 'stół', pl: 'stoły' },
+      { sg: 'szkoła', pl: 'szkoły' },
+    ],
+  },
+];
+
+export interface PluralMatrixRow {
+  ending: string;
+  badgeColor: 'amber' | 'purple' | 'emerald' | 'sky';
+  category: string;
+  markers: string;
+  examples: { sg: string; pl: string }[];
+}
+
+export const PLURAL_MATRIX_ROWS: PluralMatrixRow[] = [
+  {
+    ending: '-a',
+    badgeColor: 'amber',
+    category: 'Средний род (to)',
+    markers: 'Слова на -o, -e, -ę, -um (okno, morze, imię, muzeum)',
+    examples: [
+      { sg: 'okno', pl: 'okna' },
+      { sg: 'morze', pl: 'morza' },
+      { sg: 'jabłko', pl: 'jabłka' },
+    ],
+  },
+  {
+    ending: '-i',
+    badgeColor: 'purple',
+    category: 'Основы на K и G',
+    markers: 'Запрет на сочетания ky / gy: женский -ka, -ga и мужской -k, -g',
+    examples: [
+      { sg: 'książka', pl: 'książki' },
+      { sg: 'droga', pl: 'drogi' },
+      { sg: 'ptak', pl: 'ptaki' },
+    ],
+  },
+  {
+    ending: '-e',
+    badgeColor: 'emerald',
+    category: 'Шипящие и мягкие',
+    markers: 'Шипящие (sz, cz, rz, ż, dż), мягкие (l, j, ń, ś, ć, ź, -ia) и c, dz',
+    examples: [
+      { sg: 'klucz', pl: 'klucze' },
+      { sg: 'ulica', pl: 'ulice' },
+      { sg: 'hotel', pl: 'hotele' },
+    ],
+  },
+  {
+    ending: '-y',
+    badgeColor: 'sky',
+    category: 'Обычные твердые основы',
+    markers: 'Все остальные согласные (b, d, f, m, n, p, r, s, t, w, z и твердая ł)',
+    examples: [
+      { sg: 'dom', pl: 'domy' },
+      { sg: 'kobieta', pl: 'kobiety' },
+      { sg: 'szkoła', pl: 'szkoły' },
+    ],
+  },
+];
+
+export const PLURAL_TRAPS = [
+  {
+    title: 'Буква L — всегда мягкая [ЛЬ]',
+    description:
+      'В польском языке «l» — мягкая (как в слове «лепесток»). Поэтому hotel → hotele, koszula → koszule. Ее твердая пара — перечеркнутая «Ł», которая берет -y (szkoła → szkoły).',
+  },
+  {
+    title: 'Буквы C и DZ — исторически мягкие (цокающие)',
+    description:
+      'В славянских языках звук «ц» функционально мягкий, поэтому слова на -c и -dz требуют окончания -e: ulica → ulice, noc → noce.',
+  },
+  {
+    title: '4 парных исключения (двойственное число)',
+    description:
+      'Исторические формы парных предметов, которые запоминаются наизусть: dziecko → dzieci, oko → oczy, ucho → uszy, ręka → ręce.',
+  },
+];
+
+export const PLURAL_ADJECTIVES_RULE = {
+  title: 'Прилагательные (rodzaj niemęskoosobowy)',
+  rule:
+    'Все прилагательные во множественном числе нелично-мужского рода имеют единое окончание -e. Если основа оканчивается на k или g, пишется -ie (из-за обязательного смягчения).',
+  examples: [
+    { sg: 'nowy', pl: 'nowe' },
+    { sg: 'duży', pl: 'duże' },
+    { sg: 'drogi', pl: 'drogie' },
+    { sg: 'wysoki', pl: 'wysokie' },
+  ],
+};
+
 export const PLURAL_RULES_SHORT = [
   {
     category: '1. Средний род (Rodzaj nijaki)',
