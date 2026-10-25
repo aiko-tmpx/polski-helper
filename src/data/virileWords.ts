@@ -1,5 +1,75 @@
 import type { VirileNounWord } from '../types';
 
+export interface VirileAlgorithmStep {
+  step: number;
+  condition: string;
+  ending: '-owie' | '-i' | '-y' | '-e';
+  examples: { sg: string; pl: string }[];
+}
+
+export const VIRILE_ALGORITHM_STEPS: VirileAlgorithmStep[] = [
+  {
+    step: 1,
+    condition: 'Родство, титулы и статус',
+    ending: '-owie',
+    examples: [
+      { sg: 'pan', pl: 'panowie' },
+      { sg: 'ojciec', pl: 'ojcowie' },
+      { sg: 'profesor', pl: 'profesorowie' },
+    ],
+  },
+  {
+    step: 2,
+    condition: 'Чередования k, g, r и суффиксы -ec, -ca',
+    ending: '-y',
+    examples: [
+      { sg: 'Polak', pl: 'Polacy' },
+      { sg: 'kolega', pl: 'koledzy' },
+      { sg: 'aktor', pl: 'aktorzy' },
+      { sg: 'chłopiec', pl: 'chłopcy' },
+    ],
+  },
+  {
+    step: 3,
+    condition: 'Твердые согласные (со смягчением)',
+    ending: '-i',
+    examples: [
+      { sg: 'student', pl: 'studenci' },
+      { sg: 'sąsiad', pl: 'sąsiedzi' },
+      { sg: 'artysta', pl: 'artyści' },
+      { sg: 'Włoch', pl: 'Włosi' },
+    ],
+  },
+  {
+    step: 4,
+    condition: 'Мягкие (L, J), шипящие и нации на -anin',
+    ending: '-e',
+    examples: [
+      { sg: 'nauczyciel', pl: 'nauczyciele' },
+      { sg: 'lekarz', pl: 'lekarze' },
+      { sg: 'Amerykanin', pl: 'Amerykanie' },
+    ],
+  },
+];
+
+export const VIRILE_TRAPS = [
+  {
+    title: 'Чередования перед -i (твердые смягчаются)',
+    description:
+      't → ci (student → studenci), d → dzi (sąsiad → sąsiedzi), st → ści (artysta → artyści), ch → si (Włoch → Włosi), z → zi (Francuz → Francuzi).',
+  },
+  {
+    title: 'Чередования перед -y (k, g, r и суффиксы)',
+    description:
+      'k → cy (Polak → Polacy), g → dzy (kolega → koledzy), r → rzy (aktor → aktorzy), -ec → -cy (chłopiec → chłopcy), -ca → -cy (kierowca → kierowcy).',
+  },
+  {
+    title: '3 главных исключения',
+    description:
+      'człowiek → ludzie (полная смена корня), brat → bracia (окончание -a), ksiądz → księża.',
+  },
+];
+
 export const VIRILE_RULES_SHORT = [
   {
     category: '1. Окончание -owie (Родство, титулы, почет)',

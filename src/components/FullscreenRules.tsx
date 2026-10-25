@@ -7,7 +7,11 @@ import {
   PLURAL_ADJECTIVES_RULE,
   PLURAL_RULES_LONG,
 } from '../data/pluralWords';
-import { VIRILE_RULES_SHORT, VIRILE_RULES_LONG } from '../data/virileWords';
+import {
+  VIRILE_ALGORITHM_STEPS,
+  VIRILE_TRAPS,
+  VIRILE_RULES_LONG,
+} from '../data/virileWords';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
 
 interface FullscreenRulesProps {
@@ -303,56 +307,92 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
         {/* 3. VIRILE RULES */}
         {/* ========================================================= */}
         {type === 'virile' && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             {mode === 'short' ? (
-              <div className="space-y-4">
-                {VIRILE_RULES_SHORT.map((item, idx) => (
-                  <section
-                    key={idx}
-                    className="p-5 sm:p-6 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-3.5 shadow-xs"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-                        {item.category}
-                      </h2>
-                      <span className="text-xs font-mono font-medium px-2 py-0.5 rounded border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300">
-                        {item.badge}
-                      </span>
-                    </div>
-
-                    <p className="text-sm text-zinc-700 dark:text-zinc-300 font-medium">
-                      {item.target}
+              <div className="space-y-6">
+                {/* 1. Algorithm Flow Card */}
+                <section className="p-6 sm:p-7 rounded-xl bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 space-y-5 shadow-xs">
+                  <div className="border-b border-zinc-100 dark:border-zinc-800 pb-3.5">
+                    <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                      Алгоритм выбора за 5 секунд
+                    </h2>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+                      Проверяйте слово сверху вниз:
                     </p>
+                  </div>
 
-                    <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
-                      {item.rule}
-                    </p>
+                  <div className="divide-y divide-zinc-100 dark:divide-zinc-800/80">
+                    {VIRILE_ALGORITHM_STEPS.map((step) => {
+                      const badgeClass =
+                        step.ending === '-owie'
+                          ? 'border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300'
+                          : step.ending === '-y'
+                          ? 'border-sky-500/30 bg-sky-500/10 text-sky-800 dark:text-sky-300'
+                          : step.ending === '-i'
+                          ? 'border-purple-500/30 bg-purple-500/10 text-purple-800 dark:text-purple-300'
+                          : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300';
 
-                    {item.caution && (
-                      <div className="p-3 rounded-r-lg border-l-2 border-amber-500/80 bg-amber-500/5 dark:bg-amber-500/10 text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                        <span className="font-semibold text-amber-800 dark:text-amber-400 mr-1.5">
-                          Внимание:
-                        </span>
-                        <span>{item.caution}</span>
-                      </div>
-                    )}
+                      return (
+                        <div
+                          key={step.step}
+                          className="py-4 first:pt-1 last:pb-1 space-y-2"
+                        >
+                          {/* Top Line: Step number + condition on left, ending on right */}
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <span className="w-5 h-5 rounded flex items-center justify-center font-mono text-xs font-semibold bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 shrink-0">
+                                {step.step}
+                              </span>
+                              <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                {step.condition}
+                              </span>
+                            </div>
 
-                    {/* Clean Examples (no badge pills) */}
-                    <div className="pt-1">
-                      <div className="text-xs text-zinc-400 dark:text-zinc-500 mb-1.5 font-medium">
-                        Примеры:
-                      </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-2 gap-x-4 text-xs sm:text-sm">
-                        {item.examples.map((ex, i) => (
-                          <div key={i} className="flex items-baseline gap-1.5 font-mono">
-                            <span className="text-zinc-500 dark:text-zinc-400">{ex.sg} →</span>
-                            <span className="font-semibold text-zinc-900 dark:text-zinc-100">{ex.pl}</span>
+                            <span
+                              className={`px-2.5 py-0.5 rounded text-xs font-mono font-bold border shrink-0 ${badgeClass}`}
+                            >
+                              {step.ending}
+                            </span>
                           </div>
-                        ))}
+
+                          {/* Bottom Line: Clean examples with breathing room */}
+                          <div className="pl-7.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                            {step.examples.map((ex, i) => (
+                              <span key={i} className="inline-flex items-baseline">
+                                {ex.sg} →{' '}
+                                <span className="font-semibold text-zinc-900 dark:text-zinc-100 ml-1">
+                                  {ex.pl}
+                                </span>
+                                {i < step.examples.length - 1 && (
+                                  <span className="text-zinc-300 dark:text-zinc-700 ml-4">•</span>
+                                )}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {/* 2. Traps & Alternations Callout */}
+                <div className="p-5 sm:p-6 rounded-r-xl border-l-2 border-amber-500/80 bg-amber-500/5 dark:bg-amber-500/10 space-y-3.5">
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-800 dark:text-amber-400">
+                    <AlertCircle className="w-4 h-4 shrink-0" strokeWidth={1.75} />
+                    <span>Главные чередования и исключения</span>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {VIRILE_TRAPS.map((trap, i) => (
+                      <div key={i} className="text-xs sm:text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                        <span className="font-semibold text-zinc-900 dark:text-zinc-100 mr-1.5">
+                          {trap.title}:
+                        </span>
+                        <span className="text-zinc-600 dark:text-zinc-400">{trap.description}</span>
                       </div>
-                    </div>
-                  </section>
-                ))}
+                    ))}
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="space-y-4">
