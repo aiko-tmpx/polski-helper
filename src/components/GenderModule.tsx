@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import type { GenderWord, GrammaticalGender } from '../types';
 import { GENDER_WORDS } from '../data/genderWords';
-import { speakPolish } from '../utils/audio';
+import { speakPolish, playSuccessSound, playErrorSound } from '../utils/audio';
 import {
   Volume2,
   CheckCircle2,
@@ -72,6 +72,11 @@ export const GenderModule: React.FC<GenderModuleProps> = ({
       setSelectedGender(gender);
       setIsAnswered(true);
       setIsCorrect(correct);
+      if (correct) {
+        playSuccessSound();
+      } else {
+        playErrorSound();
+      }
     },
     [isAnswered, currentWord]
   );

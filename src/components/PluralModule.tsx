@@ -5,7 +5,7 @@ import {
   ADJECTIVES_DATA,
   PHRASES_DATA,
 } from '../data/pluralWords';
-import { speakPolish } from '../utils/audio';
+import { speakPolish, playSuccessSound, playErrorSound } from '../utils/audio';
 import {
   Volume2,
   CheckCircle2,
@@ -94,6 +94,11 @@ export const PluralModule: React.FC<PluralModuleProps> = ({
       setSelectedNounEnding(ending);
       setIsNounAnswered(true);
       setIsNounCorrect(correct);
+      if (correct) {
+        playSuccessSound();
+      } else {
+        playErrorSound();
+      }
     },
     [isNounAnswered, currentNoun]
   );
@@ -105,6 +110,11 @@ export const PluralModule: React.FC<PluralModuleProps> = ({
       setSelectedAdjEnding(ending);
       setIsAdjAnswered(true);
       setIsAdjCorrect(correct);
+      if (correct) {
+        playSuccessSound();
+      } else {
+        playErrorSound();
+      }
     },
     [isAdjAnswered, currentAdj]
   );
@@ -115,6 +125,11 @@ export const PluralModule: React.FC<PluralModuleProps> = ({
         currentPhrase.adjEnding === adjEnding && currentPhrase.nounEnding === nounEnding;
       setIsPhraseAnswered(true);
       setIsPhraseCorrect(correct);
+      if (correct) {
+        playSuccessSound();
+      } else {
+        playErrorSound();
+      }
     },
     [currentPhrase]
   );

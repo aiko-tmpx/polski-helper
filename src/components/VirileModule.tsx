@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import type { VirileNounWord } from '../types';
 import { VIRILE_NOUNS_DATA } from '../data/virileWords';
-import { speakPolish } from '../utils/audio';
+import { speakPolish, playSuccessSound, playErrorSound } from '../utils/audio';
 import {
   Volume2,
   CheckCircle2,
@@ -46,8 +46,11 @@ export const VirileModule: React.FC<VirileModuleProps> = ({
       setSelectedEnding(ending);
       setIsAnswered(true);
       setIsCorrect(correct);
-      // Pronounce plural form on answer
-      speakPolish(currentWord.plural);
+      if (correct) {
+        playSuccessSound();
+      } else {
+        playErrorSound();
+      }
     },
     [isAnswered, currentWord]
   );
