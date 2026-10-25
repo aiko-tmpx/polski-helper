@@ -106,7 +106,7 @@ export const VirileModule: React.FC<VirileModuleProps> = ({
           }`}
         >
           <span className="text-[11px] uppercase tracking-wider font-medium text-zinc-400 dark:text-zinc-500 mb-2">
-            Лично-мужской род (oni / ci)
+            Множественное число (oni / ci)
           </span>
 
           {/* Word + Audio */}

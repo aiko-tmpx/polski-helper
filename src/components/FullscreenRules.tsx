@@ -20,17 +20,17 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
 
   const title =
     type === 'gender'
-      ? 'Грамматический род'
+      ? 'Род в единственном числе'
       : type === 'plural'
-      ? 'Множественное число'
-      : 'Лично-мужской род';
+      ? 'Множественное: вещи и женщины'
+      : 'Множественное: мужчины (oni)';
 
   const subtitle =
     type === 'gender'
-      ? 'Распределение существительных на męski (ten), żeński (ta) и nijaki (to).'
+      ? 'Определение рода существительных: ten, ta, to.'
       : type === 'plural'
-      ? 'Правила окончаний для категории rodzaj niemęskoosobowy (-y, -i, -e, -a).'
-      : 'Окончания и чередования согласных для мужчин и смешанных групп (oni, ci).';
+      ? 'Правила окончаний для категории niemęskoosobowy (one / te).'
+      : 'Окончания и чередования согласных для категории męskoosobowy (oni / ci).';
 
   return (
     <div className="fixed inset-0 z-50 bg-zinc-50 dark:bg-zinc-950 overflow-y-auto flex flex-col animate-fadeIn">

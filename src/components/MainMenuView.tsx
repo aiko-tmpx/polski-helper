@@ -24,10 +24,10 @@ export const MainMenuView: React.FC<MainMenuViewProps> = ({ onNavigate }) => {
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Грамматический род
+              Род в единственном числе
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Определение мужского, женского и среднего рода (ten, ta, to)
+              Определение рода: ten, ta, to
             </p>
           </div>
 
@@ -67,10 +67,10 @@ export const MainMenuView: React.FC<MainMenuViewProps> = ({ onNavigate }) => {
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Множественное число
+              Множественное: вещи и женщины
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Категория niemęskoosobowy: предметы, животные, женщины
+              Категория niemęskoosobowy (one / te)
             </p>
           </div>
 
@@ -149,10 +149,10 @@ export const MainMenuView: React.FC<MainMenuViewProps> = ({ onNavigate }) => {
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Лично-мужской род
+              Множественное: мужчины (oni)
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Категория męskoosobowy: мужчины и смешанные группы (oni, ci)
+              Категория męskoosobowy (oni / ci)
             </p>
           </div>
 
