@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { MainMenuView } from './components/MainMenuView';
 import { GenderModule } from './components/GenderModule';
 import { PluralModule } from './components/PluralModule';
+import { VirileModule } from './components/VirileModule';
 import { FullscreenRules } from './components/FullscreenRules';
 import { type Theme, getInitialTheme, applyTheme } from './utils/theme';
 
@@ -89,7 +90,15 @@ export const App: React.FC = () => {
           />
         )}
 
-        {/* 6. Fullscreen Rules: Gender */}
+        {/* 6. Virile Training: Nouns */}
+        {currentScreen === 'train-virile-nouns' && (
+          <VirileModule
+            onBackToMenu={() => setCurrentScreen('menu')}
+            onOpenRules={() => navigateTo('rules-virile')}
+          />
+        )}
+
+        {/* 7. Fullscreen Rules: Gender */}
         {currentScreen === 'rules-gender' && (
           <FullscreenRules
             type="gender"
@@ -97,10 +106,18 @@ export const App: React.FC = () => {
           />
         )}
 
-        {/* 7. Fullscreen Rules: Plural */}
+        {/* 8. Fullscreen Rules: Plural */}
         {currentScreen === 'rules-plural' && (
           <FullscreenRules
             type="plural"
+            onClose={handleCloseRules}
+          />
+        )}
+
+        {/* 9. Fullscreen Rules: Virile */}
+        {currentScreen === 'rules-virile' && (
+          <FullscreenRules
+            type="virile"
             onClose={handleCloseRules}
           />
         )}

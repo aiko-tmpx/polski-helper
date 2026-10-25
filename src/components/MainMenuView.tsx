@@ -143,6 +143,49 @@ export const MainMenuView: React.FC<MainMenuViewProps> = ({ onNavigate }) => {
           </button>
         </div>
       </section>
+
+      {/* Module 3: Rodzaj męskoosobowy */}
+      <section className="bg-white dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 sm:p-6 shadow-xs flex flex-col gap-4 transition-colors">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+              Лично-мужской род
+            </h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+              Категория męskoosobowy: мужчины и смешанные группы (oni, ci)
+            </p>
+          </div>
+
+          <button
+            onClick={() => onNavigate('rules-virile')}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/60 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 transition-colors shrink-0"
+            title="Открыть справочник правил"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" strokeWidth={1.75} />
+            <span>Правило</span>
+          </button>
+        </div>
+
+        <div className="divide-y divide-zinc-100 dark:divide-zinc-800/80 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
+          <button
+            onClick={() => onNavigate('train-virile-nouns')}
+            className="w-full flex items-center justify-between p-3.5 sm:p-4 text-left bg-zinc-50/50 hover:bg-zinc-100/70 dark:bg-zinc-900/30 dark:hover:bg-zinc-800/50 transition-colors group"
+          >
+            <div>
+              <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+                Существительные
+              </div>
+              <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mt-0.5">
+                student → studenci, Polak → Polacy, ojciec → ojcowie
+              </div>
+            </div>
+            <ChevronRight
+              className="w-4 h-4 text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-200 group-hover:translate-x-0.5 transition-all shrink-0 ml-3"
+              strokeWidth={1.75}
+            />
+          </button>
+        </div>
+      </section>
     </div>
   );
 };

@@ -4,14 +4,28 @@ export type ScreenState =
   | 'train-plural-nouns'
   | 'train-plural-adj'
   | 'train-plural-phrases'
+  | 'train-virile-nouns'
   | 'rules-gender'
-  | 'rules-plural';
+  | 'rules-plural'
+  | 'rules-virile';
 
 export type PluralSubMode = 'nouns' | 'adjectives' | 'phrases';
 
 export type RulesMode = 'short' | 'long';
 
 export type GrammaticalGender = 'męski' | 'żeński' | 'nijaki';
+
+export interface VirileNounWord {
+  id: string;
+  singular: string;
+  plural: string;
+  correctEnding: '-i' | '-y' | '-e' | '-owie';
+  translation: string;
+  ruleExplanation: string;
+  detail: string;
+  alternation?: string;
+  isException?: boolean;
+}
 
 export interface GenderWord {
   id: string;
