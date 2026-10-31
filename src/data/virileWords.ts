@@ -3,25 +3,41 @@ import type { VirileNounWord } from '../types';
 export interface VirileAlgorithmStep {
   step: number;
   condition: string;
-  ending: '-owie' | '-i' | '-y' | '-e';
+  ending: '-owie' | '-e' | '-y' | '-i';
+  ruleHint?: string;
   examples: { sg: string; pl: string }[];
 }
 
 export const VIRILE_ALGORITHM_STEPS: VirileAlgorithmStep[] = [
   {
     step: 1,
-    condition: 'Родство, титулы и статус',
+    condition: 'Семья, титулы и статус',
     ending: '-owie',
+    ruleHint: 'Корень не меняется',
     examples: [
       { sg: 'pan', pl: 'panowie' },
       { sg: 'ojciec', pl: 'ojcowie' },
+      { sg: 'król', pl: 'królowie' },
       { sg: 'profesor', pl: 'profesorowie' },
     ],
   },
   {
     step: 2,
-    condition: 'Чередования k, g, r и суффиксы -ec, -ca',
+    condition: 'Шипящие, мягкие (l, j, ć, ń) и -anin',
+    ending: '-e',
+    ruleHint: 'Корень не меняется (просто +e)',
+    examples: [
+      { sg: 'lekarz', pl: 'lekarze' },
+      { sg: 'nauczyciel', pl: 'nauczyciele' },
+      { sg: 'gość', pl: 'goście' },
+      { sg: 'Amerykanin', pl: 'Amerykanie' },
+    ],
+  },
+  {
+    step: 3,
+    condition: 'Четверка k, g, r, c (суффиксы -ec, -ca)',
     ending: '-y',
+    ruleHint: 'k → cy • g → dzy • r → rzy • -ec/-ca → -cy',
     examples: [
       { sg: 'Polak', pl: 'Polacy' },
       { sg: 'kolega', pl: 'koledzy' },
@@ -30,9 +46,10 @@ export const VIRILE_ALGORITHM_STEPS: VirileAlgorithmStep[] = [
     ],
   },
   {
-    step: 3,
-    condition: 'Твердые согласные (со смягчением)',
+    step: 4,
+    condition: 'Все остальные твердые согласные',
     ending: '-i',
+    ruleHint: 't → ci • d → dzi • st → ści • ch → si • z → zi',
     examples: [
       { sg: 'student', pl: 'studenci' },
       { sg: 'sąsiad', pl: 'sąsiedzi' },
@@ -40,33 +57,18 @@ export const VIRILE_ALGORITHM_STEPS: VirileAlgorithmStep[] = [
       { sg: 'Włoch', pl: 'Włosi' },
     ],
   },
-  {
-    step: 4,
-    condition: 'Мягкие (L, J), шипящие и нации на -anin',
-    ending: '-e',
-    examples: [
-      { sg: 'nauczyciel', pl: 'nauczyciele' },
-      { sg: 'lekarz', pl: 'lekarze' },
-      { sg: 'Amerykanin', pl: 'Amerykanie' },
-    ],
-  },
 ];
 
 export const VIRILE_TRAPS = [
   {
-    title: 'Чередования перед -i (твердые смягчаются)',
-    description:
-      't → ci (student → studenci), d → dzi (sąsiad → sąsiedzi), st → ści (artysta → artyści), ch → si (Włoch → Włosi), z → zi (Francuz → Francuzi).',
-  },
-  {
-    title: 'Чередования перед -y (k, g, r и суффиксы)',
-    description:
-      'k → cy (Polak → Polacy), g → dzy (kolega → koledzy), r → rzy (aktor → aktorzy), -ec → -cy (chłopiec → chłopcy), -ca → -cy (kierowca → kierowcy).',
-  },
-  {
     title: '3 главных исключения',
     description:
       'człowiek → ludzie (полная смена корня), brat → bracia (окончание -a), ksiądz → księża.',
+  },
+  {
+    title: 'Двойные варианты званий',
+    description:
+      'У многих титулов и профессий допустимы оба окончания: profesorowie / profesorzy, doktorowie / doktorzy, inżynierowie / inżynierzy.',
   },
 ];
 

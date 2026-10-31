@@ -326,11 +326,11 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                       const badgeClass =
                         step.ending === '-owie'
                           ? 'border-amber-500/30 bg-amber-500/10 text-amber-800 dark:text-amber-300'
+                          : step.ending === '-e'
+                          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300'
                           : step.ending === '-y'
                           ? 'border-sky-500/30 bg-sky-500/10 text-sky-800 dark:text-sky-300'
-                          : step.ending === '-i'
-                          ? 'border-purple-500/30 bg-purple-500/10 text-purple-800 dark:text-purple-300'
-                          : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300';
+                          : 'border-purple-500/30 bg-purple-500/10 text-purple-800 dark:text-purple-300';
 
                       return (
                         <div
@@ -354,6 +354,13 @@ export const FullscreenRules: React.FC<FullscreenRulesProps> = ({ type, onClose 
                               {step.ending}
                             </span>
                           </div>
+
+                          {/* Rule hint / Alternations */}
+                          {step.ruleHint && (
+                            <div className="pl-7.5 text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                              {step.ruleHint}
+                            </div>
+                          )}
 
                           {/* Bottom Line: Clean examples with breathing room */}
                           <div className="pl-7.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-mono text-zinc-500 dark:text-zinc-400">
