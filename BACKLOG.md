@@ -78,11 +78,11 @@ Design System: **AGENTS.md (Developer-grade, Linear/shadcn, zero emojis, zero ga
   - Enabled Row Level Security (RLS) with optimized policy `Users can manage only their own words` (`(select auth.uid()) = user_id`) for single-evaluation performance.
   - Supabase security audit passed with 0 vulnerabilities.
 
-- [x] **9. Supabase Client & Header Authentication (Auth UI)**
+- [x] **9. Supabase Client & Dedicated Auth Screen (Auth UI)**
   - Installed `@supabase/supabase-js`.
-  - Configured `.env.local`, `.env.example`, and `src/utils/supabase.ts` client.
-  - Added `[ Sign In ]` button with `User` icon (and active user indicator with `[ Sign Out ]`) in Header.
-  - Built minimal authentication modal (`src/components/AuthModal.tsx`) with login and registration modes in shadcn Dialog style.
+  - Configured `.env.local`, `.env.example`, and `src/utils/supabase.ts` client with username-to-virtual-email mapping.
+  - Added `[ Sign In ]` button with `User` icon (and active username indicator with `[ Sign Out ]`) in Header.
+  - Built dedicated full-page authentication screen (`src/components/AuthScreen.tsx`) supporting pure username + password with mode switcher (`Sign In` / `Sign Up`).
   - Integrated active session listener in `src/App.tsx`.
 
 - [ ] **10. Bulk Import & Dictionary Management (Dictionary & Bulk Import)**
