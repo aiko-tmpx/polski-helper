@@ -52,6 +52,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess 
         if (error) {
           if (error.message.includes('Invalid login credentials')) {
             setErrorMessage('Неверный логин или пароль');
+          } else if (error.message.includes('Email not confirmed')) {
+            setErrorMessage('Требуется выключить Confirm email в дашборде Supabase');
           } else {
             setErrorMessage(error.message);
           }
@@ -89,8 +91,10 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess 
 
           if (!signInError) {
             onSuccess();
+          } else if (signInError.message.includes('Email not confirmed')) {
+            setErrorMessage('В дашборде Supabase включен Confirm email. Выключите его в Auth → Providers → Email.');
           } else {
-            setErrorMessage('Ошибка создания аккаунта');
+            setErrorMessage(signInError.message);
           }
         }
       }
