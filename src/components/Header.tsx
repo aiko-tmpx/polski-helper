@@ -11,6 +11,7 @@ interface HeaderProps {
   user?: User | null;
   onOpenAuth?: () => void;
   onSignOut?: () => void;
+  isAuthScreen?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -20,6 +21,7 @@ export const Header: React.FC<HeaderProps> = ({
   user,
   onOpenAuth,
   onSignOut,
+  isAuthScreen,
 }) => {
   return (
     <header className="sticky top-0 z-30 w-full border-b border-zinc-200 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm transition-colors duration-150">
@@ -47,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <LogOut className="w-4 h-4" strokeWidth={1.75} />
               </button>
             </div>
-          ) : (
+          ) : !isAuthScreen ? (
             <button
               onClick={onOpenAuth}
               className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800/60 text-xs font-medium text-zinc-700 dark:text-zinc-300 transition-colors active:scale-95 shadow-2xs"
@@ -55,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
               <UserIcon className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" strokeWidth={1.75} />
               <span>Войти</span>
             </button>
-          )}
+          ) : null}
 
           {/* Theme Toggle */}
           <button

@@ -71,6 +71,7 @@ export const App: React.FC = () => {
         user={user}
         onOpenAuth={() => navigateTo('auth')}
         onSignOut={handleSignOut}
+        isAuthScreen={currentScreen === 'auth'}
       />
 
       <main className="flex-1 flex flex-col">
