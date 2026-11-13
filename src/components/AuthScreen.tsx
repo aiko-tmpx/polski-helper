@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase, formatUsernameToEmail } from '../utils/supabase';
+import { supabase } from '../utils/supabase';
 import { Loader2 } from 'lucide-react';
 
 interface AuthScreenProps {
@@ -9,28 +9,20 @@ interface AuthScreenProps {
 
 export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess }) => {
   const [mode, setMode] = useState<'sign_in' | 'sign_up'>('sign_in');
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setInfoMessage(null);
 
-    const cleanUsername = username.trim().toLowerCase();
-    if (!cleanUsername) {
-      setErrorMessage('Введите логин');
-      return;
-    }
-
-    if (cleanUsername.length < 3) {
-      setErrorMessage('Логин должен содержать минимум 3 символа');
-      return;
-    }
-
-    if (!/^[a-z0-9_-]+$/i.test(cleanUsername)) {
-      setErrorMessage('Только латинские буквы, цифры, дефис и подчеркивание');
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      setErrorMessage('Введите корректный email');
       return;
     }
 
@@ -40,20 +32,19 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess 
     }
 
     setIsLoading(true);
-    const virtualEmail = formatUsernameToEmail(cleanUsername);
 
     try {
       if (mode === 'sign_in') {
         const { error } = await supabase.auth.signInWithPassword({
-          email: virtualEmail,
+          email: cleanEmail,
           password,
         });
 
         if (error) {
           if (error.message.includes('Invalid login credentials')) {
-            setErrorMessage('Неверный логин или пароль');
+            setErrorMessage('Неверный email или пароль');
           } else if (error.message.includes('Email not confirmed')) {
-            setErrorMessage('Требуется выключить Confirm email в дашборде Supabase');
+            setErrorMessage('Email не подтвержден. Проверьте почту или выключите Confirm email в дашборде Supabase.');
           } else {
             setErrorMessage(error.message);
           }
@@ -63,18 +54,13 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess 
         onSuccess();
       } else {
         const { data, error } = await supabase.auth.signUp({
-          email: virtualEmail,
+          email: cleanEmail,
           password,
-          options: {
-            data: {
-              username: username.trim(),
-            },
-          },
         });
 
         if (error) {
           if (error.message.includes('User already registered')) {
-            setErrorMessage('Логин уже занят');
+            setErrorMessage('Пользователь с таким email уже существует');
           } else {
             setErrorMessage(error.message);
           }
@@ -84,18 +70,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess 
         if (data.session) {
           onSuccess();
         } else {
-          const { error: signInError } = await supabase.auth.signInWithPassword({
-            email: virtualEmail,
-            password,
-          });
-
-          if (!signInError) {
-            onSuccess();
-          } else if (signInError.message.includes('Email not confirmed')) {
-            setErrorMessage('В дашборде Supabase включен Confirm email. Выключите его в Auth → Providers → Email.');
-          } else {
-            setErrorMessage(signInError.message);
-          }
+          // If email confirmation is enabled on Supabase, an email was sent
+          setInfoMessage(`На почту ${cleanEmail} отправлено письмо для подтверждения.`);
         }
       }
     } catch {
@@ -116,6 +92,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess 
             onClick={() => {
               setMode('sign_in');
               setErrorMessage(null);
+              setInfoMessage(null);
             }}
             className={`py-1.5 px-3 rounded-md transition-all text-center ${
               mode === 'sign_in'
@@ -130,6 +107,7 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess 
             onClick={() => {
               setMode('sign_up');
               setErrorMessage(null);
+              setInfoMessage(null);
             }}
             className={`py-1.5 px-3 rounded-md transition-all text-center ${
               mode === 'sign_up'
@@ -140,6 +118,13 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess 
             Регистрация
           </button>
         </div>
+
+        {/* Info message */}
+        {infoMessage && (
+          <div className="p-2.5 rounded-lg border-l-2 border-emerald-500 bg-emerald-500/10 text-xs text-emerald-800 dark:text-emerald-300 leading-relaxed">
+            {infoMessage}
+          </div>
+        )}
 
         {/* Error message */}
         {errorMessage && (
@@ -152,16 +137,17 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onBackToMenu, onSuccess 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1.5">
-              Логин
+              Email
             </label>
             <input
-              type="text"
+              type="email"
               autoCapitalize="none"
               autoCorrect="off"
               required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg text-sm bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors font-mono"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="name@example.com"
+              className="w-full px-3 py-2 rounded-lg text-sm bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:border-zinc-400 dark:focus:border-zinc-600 transition-colors"
             />
           </div>
 
