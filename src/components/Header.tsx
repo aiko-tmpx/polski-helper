@@ -1,6 +1,7 @@
 import React from 'react';
 import { Sun, Moon, User as UserIcon, LogOut } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
+import { extractUsername } from '../utils/supabase';
 import type { Theme } from '../utils/theme';
 
 interface HeaderProps {
@@ -35,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
           {user ? (
             <div className="flex items-center gap-2">
               <span className="hidden sm:inline text-xs font-mono text-zinc-500 dark:text-zinc-400 max-w-[140px] truncate">
-                {user.email}
+                {extractUsername(user.email, user.user_metadata)}
               </span>
               <button
                 onClick={onSignOut}

@@ -1,5 +1,6 @@
 export type ScreenState =
   | 'menu'
+  | 'auth'
   | 'train-gender'
   | 'train-plural-nouns'
   | 'train-plural-adj'

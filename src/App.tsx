@@ -3,7 +3,7 @@ import type { ScreenState } from './types';
 import type { User } from '@supabase/supabase-js';
 import { supabase } from './utils/supabase';
 import { Header } from './components/Header';
-import { AuthModal } from './components/AuthModal';
+import { AuthScreen } from './components/AuthScreen';
 import { MainMenuView } from './components/MainMenuView';
 import { GenderModule } from './components/GenderModule';
 import { PluralModule } from './components/PluralModule';
@@ -16,7 +16,6 @@ export const App: React.FC = () => {
   const [previousScreen, setPreviousScreen] = useState<ScreenState>('menu');
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
   const [user, setUser] = useState<User | null>(null);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
     applyTheme(theme);
@@ -70,17 +69,19 @@ export const App: React.FC = () => {
         onToggleTheme={toggleTheme}
         onLogoClick={handleLogoClick}
         user={user}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
+        onOpenAuth={() => navigateTo('auth')}
         onSignOut={handleSignOut}
       />
 
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onSuccess={() => setIsAuthModalOpen(false)}
-      />
-
       <main className="flex-1 flex flex-col">
+        {/* 0. Dedicated Auth Screen */}
+        {currentScreen === 'auth' && (
+          <AuthScreen
+            onBackToMenu={() => setCurrentScreen('menu')}
+            onSuccess={() => setCurrentScreen('menu')}
+          />
+        )}
+
         {/* 1. Main Menu Hub */}
         {currentScreen === 'menu' && (
           <MainMenuView onNavigate={navigateTo} />
