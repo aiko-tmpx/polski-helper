@@ -15,6 +15,19 @@ export type RulesMode = 'short' | 'long';
 
 export type GrammaticalGender = 'męski' | 'żeński' | 'nijaki';
 
+export interface UserWord {
+  id: string;
+  user_id: string;
+  word: string;
+  translation: string;
+  notes?: string | null;
+  interval_days: number;
+  repetition_count: number;
+  ease_factor: number;
+  next_review_at: string;
+  created_at: string;
+}
+
 export interface VirileNounWord {
   id: string;
   singular: string;

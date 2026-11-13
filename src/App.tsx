@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import type { ScreenState } from './types';
+import type { User } from '@supabase/supabase-js';
+import { supabase } from './utils/supabase';
 import { Header } from './components/Header';
+import { AuthModal } from './components/AuthModal';
 import { MainMenuView } from './components/MainMenuView';
 import { GenderModule } from './components/GenderModule';
 import { PluralModule } from './components/PluralModule';
@@ -12,6 +15,8 @@ export const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<ScreenState>('menu');
   const [previousScreen, setPreviousScreen] = useState<ScreenState>('menu');
   const [theme, setTheme] = useState<Theme>(() => getInitialTheme());
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
     applyTheme(theme);
@@ -21,8 +26,28 @@ export const App: React.FC = () => {
     document.title = 'Polski Helper — Польская грамматика';
   }, []);
 
+  // Listen for Supabase auth state changes
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
   };
 
   const navigateTo = (screen: ScreenState) => {
@@ -44,6 +69,15 @@ export const App: React.FC = () => {
         theme={theme}
         onToggleTheme={toggleTheme}
         onLogoClick={handleLogoClick}
+        user={user}
+        onOpenAuth={() => setIsAuthModalOpen(true)}
+        onSignOut={handleSignOut}
+      />
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onSuccess={() => setIsAuthModalOpen(false)}
       />
 
       <main className="flex-1 flex flex-col">
