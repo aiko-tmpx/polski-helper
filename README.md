@@ -1,98 +1,84 @@
-# 🇵🇱 Polski Helper — Тренажер множественного числа (rodzaj niemęskoosobowy)
+# Polski Helper
 
-Мобильное веб-приложение (SPA) для тренировки и доведения до автоматизма окончаний множественного числа в польском языке для категории **rodzaj niemęskoosobowy** (неодушевленные предметы, животные, растения и женщины / группы без мужчин).
-
-## 🚀 Особенности и режимы
-
-1. ⚡ **Спринт по окончаниям:**
-   - Мгновенная тренировка отдельных слов.
-   - Большие кнопки под палец: `[-y]`, `[-i]`, `[-e]`, `[-ie]`, `[-a]`.
-   - Поддержка горячих клавиш: `1`, `2`, `3`, `4`, `5` (на клавиатуре).
-   - Мгновенная обратная связь с анимацией (зеленый/красный) и тактильным откликом.
-   - **Подсказка с правилом при ошибке**: если ответ неверный, сразу показывается точное правило на русском языке.
-
-2. 🔗 **Режим словосочетаний (Прилагательное + Существительное):**
-   - Тренировка парных конструкций: `nowa szkoła -> nowe szkoły`, `długa ulica -> długie ulice`.
-   - Раздельный выбор окончаний для прилагательного (`-e`, `-ie`) и существительного (`-y`, `-i`, `-e`, `-a`).
-   - Детальный разбор обоих правил при ошибке. 
-
-3. 📖 **База слов (75+ слов и фраз):**
-   - Удобный поиск по словам на польском и русском.
-   - Фильтры по категориям: *Кафе и еда*, *Город и транспорт*, *Дом и покупки*, *Прилагательные*, *Исключения*.
-   - Фильтры по окончаниям (`-y`, `-i`, `-e`, `-ie`, `-a`).
-   - Озвучка польского произношения (Web Speech API).
-
-4. 💡 **Шпаргалка и справочник правил:**
-   - Наглядная интерактивная сводка всех правил и исключений (*dzieci, oczy, uszy, ręce*).
-
-5. ⚠️ **Работа над ошибками и статистика:**
-   - Локальное сохранение серий побед (streak 🔥), лучшего рекорда (🏆) и процента точности.
-   - Отдельный режим тренировки «Только ошибки» для отработки сложных слов.
-   - Все данные сохраняются в `localStorage` вашего браузера (без бэкенда).
+Developer-grade web application for mastering Polish grammar and vocabulary through focused drills, structured reference guides, and spaced repetition (SRS).
 
 ---
 
-## 📚 Грамматическая логика (rodzaj niemęskoosobowy)
+## Features
 
-### 1. Прилагательные:
-* **По умолчанию**: окончание `-e` (*nowe, duże, małe*).
-* **После корней на `k` и `g`**: окончание `-ie` (*drogie, wysokie, polskie*).
+### 1. Grammatical Gender (Singular)
+- Immediate identification of masculine (*męski* / *ten*), feminine (*żeński* / *ta*), and neuter (*nijaki* / *to*) nouns.
+- Keyboard-driven controls with `<kbd>` badges (`1`, `2`, `3`).
+- Audio pronunciation via Web Speech API on demand.
 
-### 2. Существительные:
-* **Средний род** (на `-o`, `-e`, `-ę` в ед. ч.): всегда `-a` (*okno -> okna*, *zdjęcie -> zdjęcia*, *lusterko -> lusterka*).
-* **Шипящие, отвердевшие и мягкие** (`sz, cz, rz, ż, c, dz, l` или на `-ia / -ja`): всегда `-e` (*ulica -> ulice*, *kawiarnia -> kawiarnie*, *wieża -> wieże*, *smycz -> smycze*).
-* **Основы на `k` / `g`**: всегда `-i` (*książka -> książki*, *kubek -> kubki*).
-* **Обычные твердые согласные** (`b, d, f, ł, m, n, p, r, s, t, w, z`): всегда `-y` (*szkoła -> szkoły*, *herbata -> herbaty*).
+### 2. Plural: Non-Virile (rodzaj niemęskoosobowy)
+- Target endings for inanimate nouns, animals, and feminine groups (`-y`, `-i`, `-e`, `-a`).
+- Noun drills, adjective drills (`-e`, `-ie`), and paired phrase drills (e.g. *nowa szkoła → nowe szkoły*).
+- Decision-flow reference guide (`[ Rule ]`) for fast 5-second lookups.
 
-### 3. Базовые исключения:
-* `dziecko` &rarr; `dzieci` (дети, rodzaj niemęskoosobowy).
-* `oko` &rarr; `oczy` (глаза, архаичное двойственное число).
-* `ucho` &rarr; `uszy` (уши, архаичное двойственное число).
-* `ręka` &rarr; `ręce` (руки, архаичное двойственное число).
+### 3. Plural: Virile (rodzaj męskoosobowy)
+- Nominative plural endings for masculine personal nouns and mixed groups (`-owie`, `-e`, `-y`, `-i`).
+- Inlined consonant alternation mapping: *t → ci*, *d → dzi*, *k → cy*, *g → dzy*, *r → rzy*, *-ec/-ca → -cy*.
+- Clear categorization of irregular forms (*ludzie*, *bracia*, *księża*).
 
----
-
-## 🛠️ Стек технологий
-
-* **React 19** + **TypeScript**
-* **Vite** (с относительным путем `base: './'` для поддержки любых путей на GitHub Pages)
-* **Tailwind CSS**
-* **Lucide React** (иконки)
-* **Web Audio API** (звуковые эффекты без внешних MP3 файлов)
-* **Canvas Confetti** (праздничные анимации рекордов)
-* **GitHub Actions** (автодеплой на GitHub Pages)
+### 4. Vocabulary & Spaced Repetition (In Progress)
+- Cloud-synced personal dictionary backed by Supabase (PostgreSQL 17 + Row Level Security).
+- Bulk word import supporting both delimited plain text and JSON.
+- Anki-style flip cards with four-button memory rating (`Again`, `Hard`, `Good`, `Easy`).
 
 ---
 
-## 💻 Локальный запуск
+## Design System
 
-1. Установите зависимости:
+Strictly aligned with [`AGENTS.md`](./AGENTS.md):
+- **Zero AI-Slop & Anti-Gamification:** No emojis, no streaks, no trophies, and no congratulatory modals.
+- **Aesthetics:** Clean, developer-grade interface inspired by Linear, Raycast, and shadcn/ui.
+- **Theming:** Full dark and light mode support with zinc/slate base and Polish carmine accent (`rose-600` / `rose-500`).
+- **Typography & Layout:** Restrained font weights, generous whitespace, and subtle feedback states without solid fills.
+
+---
+
+## Tech Stack
+
+- **Frontend:** React 19, TypeScript, Vite, Tailwind CSS
+- **Icons:** Lucide React (`strokeWidth={1.75}`)
+- **Audio:** Web Speech API (TTS) and Web Audio API synthesized feedback chimes
+- **Backend & Database:** Supabase (PostgreSQL, Supabase Auth, Row Level Security)
+- **Code Quality:** Oxlint (linter), strict TypeScript checks
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/aiko-tmpx/polski-helper.git
+   cd polski-helper
+   ```
+
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Запустите локальный сервер разработки:
+3. Start the local development server:
    ```bash
    npm run dev
    ```
 
-3. Откройте в браузере адрес, указанный в терминале (обычно `http://localhost:5173`).
+4. Open the displayed URL in your browser (typically `http://localhost:5173`).
 
 ---
 
-## 🚢 Деплой на GitHub Pages
+## Scripts
 
-В репозитории уже настроен автоматический CI/CD воркфлоу [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml).
-
-1. Создайте репозиторий на GitHub и подключите его:
-   ```bash
-   git remote add origin https://github.com/ВАШ_ЛОГИН/polski-helper.git
-   git add .
-   git commit -m "feat: initial commit with polish plural trainer"
-   git push -u origin main
-   ```
-
-2. В настройках вашего репозитория на GitHub перейдите в:
-   **Settings** &rarr; **Pages** &rarr; в разделе **Build and deployment** выберите **Source: GitHub Actions**.
-
-3. При каждом коммите в ветку `main` проект будет автоматически собираться и публиковаться на GitHub Pages!
+- `npm run dev` — Starts the Vite development server.
+- `npm run build` — Type-checks (`tsc -b`) and bundles for production (`vite build`).
+- `npm run lint` — Runs `oxlint` for high-performance static analysis.
+- `npm run preview` — Previews the production build locally.

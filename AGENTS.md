@@ -1,58 +1,58 @@
-# UI/UX & ENGINEERING GUIDELINES (POLSKI HELPER)
+# UI/UX & Engineering Guidelines (Polski Helper)
 
-Этот документ определяет нерушимые правила проектирования, верстки и архитектуры проекта. Любые изменения должны строго следовать этим ограничениям.
+This document establishes the binding design, architectural, and layout constraints for the project. All modifications must strictly adhere to these rules.
 
 ---
 
 ## 1. Zero AI-Slop & Anti-Gamification
-- **Никаких эмодзи:** категорически запрещено использовать любые эмодзи (🏷️, ✨, 🔥, 🏆, 📦, 🎨, 📎, 🟡, 🟢 и т.д.) в интерфейсе, кнопках, текстах и справочниках.
-- **Никакой навязчивой геймификации:** никаких стриков, огней, кубков, всплывающих поздравительных модалок или конфетти.
-- **Иконки:** исключительно консистентные векторные SVG-иконки `lucide-react` с толщиной обводки `strokeWidth={1.75}` (или `1.5`).
+- **No Emojis:** Strictly forbidden to use emojis (🏷️, ✨, 🔥, 🏆, 📦, 🎨, 📎, 🟡, 🟢, etc.) anywhere in the UI, buttons, text, examples, or grammar rules.
+- **No Aggressive Gamification:** No streaks, fires, trophies, congratulatory modals, or confetti animations.
+- **Vector Icons Only:** Exclusively use consistent Lucide SVG icons (`lucide-react`) with `strokeWidth={1.75}` (or `1.5`).
 
 ---
 
-## 2. Стилистика и эстетика (Developer-Grade: Linear, Raycast, shadcn/ui)
+## 2. Aesthetics & Styling (Developer-Grade: Linear, Raycast, shadcn/ui)
 
-### Типографика:
-- Никаких сверхжирных шрифтов (`font-black`, `font-extrabold`).
-- Заголовки: максимум `font-semibold` (600), h1 максимум `font-bold` (700) с естественным кернингом (`tracking-tight`).
-- Основной/поясняющий текст: приглушенный `text-zinc-500 dark:text-zinc-400`.
-- Примеры, хоткеи и технические данные: `font-mono text-xs`.
+### Typography:
+- No ultra-heavy font weights (`font-black`, `font-extrabold`).
+- Headings: maximum `font-semibold` (600), h1 maximum `font-bold` (700) with natural kerning (`tracking-tight`).
+- Secondary and explanatory text: muted `text-zinc-500 dark:text-zinc-400`.
+- Examples, hotkeys, and technical markers: `font-mono text-xs`.
 
-### Цветовая палитра:
-- **Dark Theme:** фон `bg-zinc-950` (#09090b), карточки `bg-white/5` или `bg-zinc-900/60`, границы `border-zinc-800`.
-- **Light Theme:** чистый фон `bg-zinc-50`, карточки `bg-white`, границы `border-zinc-200`, мягкие тени `shadow-xs`.
-- **Брендовый акцент:** сдержанный польский кармин `rose-600` (light) / `rose-500` (dark) либо нейтральный монохром `zinc-900` / `zinc-100`. Никакого дефолтного синего.
+### Color Palette:
+- **Dark Theme:** background `bg-zinc-950` (#09090b), card surface `bg-white/5` or `bg-zinc-900/60`, borders `border-zinc-800`.
+- **Light Theme:** clean background `bg-zinc-50`, card surface `bg-white`, borders `border-zinc-200`, soft shadows `shadow-xs`.
+- **Brand Accent:** restrained Polish carmine `rose-600` (light) / `rose-500` (dark), or neutral monochrome `zinc-900` / `zinc-100`. Avoid default saturated blues.
 
-### Компоновка и «Воздух»:
-- **Запрещен эффект «коробки в коробке»:** не вкладывать серые рамки с фонами внутрь уже существующих карточек.
-- Использовать просторные отступы и тонкие мягкие разделители `divide-zinc-100 dark:divide-zinc-800`.
-
----
-
-## 3. Интерактив и хоткеи
-- Хоткеи `[1]`, `[2]`, `[Space]` оформляются ТОЛЬКО как Linear-style `<kbd>`-бейджи (шрифт `font-mono`, рамка `border-zinc-300 dark:border-zinc-700`, фон `bg-zinc-100 dark:bg-zinc-800`).
-- Индикация ответов: деликатная (тонкий бордер `border-emerald-500/50` / `border-rose-500/50` и легкий тинт фона `bg-emerald-500/10` / `bg-rose-500/10`), без сплошных ядовитых заливок.
+### Layout & Breathing Room:
+- **No "Box-in-a-Box" Anti-pattern:** Do not nest bordered grey containers inside already bordered parent cards.
+- Use generous padding/gaps and subtle dividers (`divide-zinc-100 dark:divide-zinc-800`).
 
 ---
 
-## 4. Спецификации модуля «Словарь и повторение (SRS)»
+## 3. Interactivity & Hotkeys
+- Hotkeys `[1]`, `[2]`, `[Space]` must ALWAYS be rendered as Linear-style `<kbd>` badges (`font-mono`, border `border-zinc-300 dark:border-zinc-700`, background `bg-zinc-100 dark:bg-zinc-800`).
+- Feedback states: delicate indication (thin accent border `border-emerald-500/50` / `border-rose-500/50` and subtle 10% background tint `bg-emerald-500/10` / `bg-rose-500/10`), never solid saturated fills.
 
-### Авторизация (Auth):
-- Кнопка в шапке рядом с темой: `[ Вход ]` (иконка Lucide `User`) или `user@email` + `[ Выход ]`.
-- Модальное окно (shadcn Dialog): минималистичные инпуты Email/Password, кнопка `[ Войти ]` / `[ Зарегистрироваться ]`, без баннеров и лишней графики.
+---
 
-### Массовый импорт:
-- Простое поле для вставки текста:
-  - Авто-парсинг строк `слово - перевод`, `слово;перевод` или валидного JSON `[{"word":"...", "translation":"..."}]`.
-  - Моментальный предпросмотр перед отправкой в базу («Найдено: 300 слов»).
+## 4. Vocabulary & Spaced Repetition (SRS) Specifications
 
-### Тренажер карточек (Anki-style):
-- Лицевая сторона: польское слово по центру крупно (font-semibold, 36px) + кнопка озвучки.
-- Подсказка: `<kbd>Space</kbd> перевернуть`.
-- Оборот: перевод, пометки.
-- Оценка знания с клавиатуры:
-  - `<kbd>1</kbd> Забыл` (rose)
-  - `<kbd>2</kbd> Трудно` (amber)
-  - `<kbd>3</kbd> Помню` (emerald)
-  - `<kbd>4</kbd> Легко` (sky)
+### Authentication (Auth):
+- Header placement next to theme toggle: minimal `[ Sign In ]` (Lucide `User` icon) or `user@email` + `[ Sign Out ]`.
+- Modal (shadcn Dialog): clean Email/Password inputs, primary button `[ Sign In ]` / `[ Register ]`, without marketing banners or decorative graphics.
+
+### Bulk Import:
+- Simple, friction-free input area:
+  - Auto-parsing for delimited lines `word - translation`, `word;translation`, or valid JSON `[{"word":"...", "translation":"..."}]`.
+  - Instant live preview before committing to DB ("Found: 300 words").
+
+### Flashcards Trainer (Anki-style):
+- Front side: Polish word centered and prominent (`font-semibold`, 36px) + TTS audio button.
+- Cue: `<kbd>Space</kbd> flip`.
+- Back side: translation, grammar notes.
+- Keyboard rating evaluation:
+  - `<kbd>1</kbd> Again` (rose)
+  - `<kbd>2</kbd> Hard` (amber)
+  - `<kbd>3</kbd> Good` (emerald)
+  - `<kbd>4</kbd> Easy` (sky)

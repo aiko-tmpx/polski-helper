@@ -1,115 +1,115 @@
-# Бэклог задач: Рефакторинг UI/UX тренажера Polski Helper
+# Task Backlog: Polski Helper
 
-Статус рефакторинга: **Завершен**  
-Целевой дизайн-код: **Developer-grade (shadcn/ui, Linear, Raycast, Vercel)**  
-Палитра: **Neutral Zinc / Slate + Carmine (Rose) Accent**  
-Темы: **Dark & Light**
-
----
-
-## Задачи
-
-- [x] **0. Инициализация бэклога проекта**
-  - Создание `BACKLOG.md` со структурой задач и требованиями рефакторинга.
-
-- [x] **1. Система тем (Light/Dark) и токены Tailwind**
-  - Поддержка `class="dark"` на `<html>`.
-  - Утилита `src/utils/theme.ts` с сохранением в `localStorage` (`polski_helper_theme`, default: dark).
-  - Скрипт в `index.html` для предотвращения мерцания (flash of unstyled theme).
-  - Чистая палитра: Zinc/Slate, акцент кармин (`rose-600` / `rose-500`), сдержанные мнемонические оттенки для родов (индиго, роза, янтарь).
-
-- [x] **2. Полный дроп статистики, геймификации и звуков**
-  - Удалены все стрики (огонь, дни, серии побед, кубки).
-  - Удалены счетчики ответов, точность и сброс статистики.
-  - Удален Web Audio API синтезатор звуков, кнопка громкости и конфетти (`canvas-confetti`).
-  - Удалены файлы `src/utils/storage.ts` и `src/utils/confetti.ts`.
-  - В `src/utils/audio.ts` оставлено только естественное произношение слов на польском через `SpeechSynthesis`.
-
-- [x] **3. Минималистичный Header и брендинг**
-  - Создан компонент `src/components/Header.tsx`.
-  - Только название «Polski Helper» (`font-semibold`, 15–16px) слева (с возможностью клика для возврата в меню).
-  - Переключатель темы (Lucide `Sun` / `Moon`, stroke 1.75px) справа.
-  - Удалены флаги, вторичные бейджи («ТРЕНАЖЕР», «Грамматика и окончания»).
-
-- [x] **4. Рефакторинг Главного меню (Главного экрана)**
-  - Заголовок h1 («Грамматика») с аккуратным подзаголовком.
-  - Карточки модулей в стиле shadcn/ui без визуального шума.
-  - Кнопка теории в правом верхнем углу шапки каждой карточки: компактная кнопка `[ Правило ]` с иконкой `BookOpen`.
-  - Пункты выбора режимов в виде чистого плоского списка строк:
-    * Заголовок пункта (`font-medium`).
-    * Сабтайтл в одну строку с практическим примером (`text-xs font-mono text-zinc-500`, напр. `okno → okna`).
-    * Минималистичная стрелка справа (`ChevronRight`).
-  - Полное удаление спойлеров правил и чипсов с окончаниями из кнопок меню.
-  - Полный отказ от эмодзи.
-
-- [x] **5. Рефакторинг экранов тренировки (Интерактив)**
-  - Слово для проверки: чистый шрифт, `font-semibold` (вес 600), нормальный kerning.
-  - Варианты ответа в нейтральном стиле shadcn (`bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800`).
-  - Хоткеи 1, 2, 3... как аккуратные Linear-style `<kbd>`-бейджи в правом верхнем углу кнопки.
-  - Деликатная обратная связь при ответе: акцентный border (`border-emerald-500/60` / `border-rose-500/60`) и тонкий тинт фона (`bg-emerald-500/10` / `bg-rose-500/10`), без ядовитых заливок.
-  - Разбор ошибок в строгом Callout-блоке с `border-l-2` без эмодзи.
-  - Отсутствие кликабельности всей карточки (переход только по кнопке «Дальше» или Enter/Пробел).
-
-- [x] **6. Рефакторинг справочника и правил (Fullscreen Rules)**
-  - Удалены серые рамки-пилюли с каждого слова в примерах (чистая сетка с польским словом и переводом).
-  - Блоки исключений («Внимание:») — строгие Callout-блоки с `border-l-2 border-amber-500/80`.
-  - Селектор Кратко / Подробно в стиле shadcn tabs/segmented control.
-  - Полный отказ от эмодзи и цветных кружочков.
-
-- [x] **7. Финальная верификация, сборка и проверка**
-  - Успешная сборка `npm run build` (`tsc -b && vite build`).
-  - Линтер `npm run lint` (`oxlint`) — 0 ошибок и 0 предупреждений.
-  - Проверка отсутствия эмодзи по всему проекту.
+Refactoring Status: **Completed**  
+Target Design Language: **Developer-grade (shadcn/ui, Linear, Raycast, Vercel)**  
+Color Palette: **Neutral Zinc / Slate + Carmine (Rose) Accent**  
+Theme Support: **Dark & Light**
 
 ---
 
-## Новый модуль: «Словарь и интервальное повторение» (Vocabulary & SRS)
+## Completed Tasks: Core UI/UX Refactoring
 
-Статус: **В реализации (Фаза 8 завершена, переход к Фазе 9)**  
-Бэкенд: **Supabase (PostgreSQL 17 + Auth + Row Level Security)**  
-Методика обучения: **Spaced Repetition System (SRS, алгоритм Anki / SM-2)**  
-Дизайн-система: **AGENTS.md (Developer-grade, Linear/shadcn, zero emojis, zero gamification)**
+- [x] **0. Backlog Initialization**
+  - Initialized `BACKLOG.md` with project architecture and refactoring criteria.
 
-### Задачи:
+- [x] **1. Theme System (Light/Dark) & Tailwind Tokens**
+  - Configured `class="dark"` on `<html>`.
+  - Utility `src/utils/theme.ts` with `localStorage` persistence (`polski_helper_theme`, default: dark).
+  - Pre-render script in `index.html` to prevent flash of unstyled theme (FOUC).
+  - Clean palette: Zinc/Slate, carmine brand accent (`rose-600` / `rose-500`), subtle mnemonic shades for grammatical genders (indigo, rose, amber).
 
-- [x] **8. База данных Supabase и схема безопасности (Data Layer)**
-  - Создана таблица `user_words`: `id` (uuid), `user_id` (uuid), `word` (text), `translation` (text), `notes` (text), `interval_days` (int), `repetition_count` (int), `ease_factor` (numeric 2.5), `next_review_at` (timestamptz), `created_at` (timestamptz).
-  - Создан композитный индекс `idx_user_words_review` на `(user_id, next_review_at)`.
-  - Включен Row Level Security (RLS) с оптимизированной политикой `Users can manage only their own words` (`(select auth.uid()) = user_id`) для мгновенных запросов без вызова функций на строку.
-  - Аудит безопасности Supabase пройден (0 уязвимостей).
+- [x] **2. Complete Removal of Stats, Gamification & Sound Effects**
+  - Dropped all streak counters, fires, daily streaks, win series, and trophy badges.
+  - Removed answer counters, percentage precision displays, and stats resets.
+  - Removed Web Audio synthesizer sound effects, volume button, and confetti (`canvas-confetti`).
+  - Removed `src/utils/storage.ts` and `src/utils/confetti.ts`.
+  - Kept natural Polish pronunciation via `SpeechSynthesis` in `src/utils/audio.ts` (triggered strictly on explicit user click).
 
-- [ ] **9. Supabase Client & Простая авторизация в Хедере (Auth UI)**
-  - Установка `@supabase/supabase-js`.
-  - Создание `.env.local` и `src/utils/supabase.ts` с переменными окружения.
-  - Добавление кнопки `[ Вход ]` (иконка `User`) / `[ user@email ]` в Header рядом с переключателем темы.
-  - Минималистичная модалка входа/регистрации (Email + Пароль) в стиле shadcn Dialog без лишней графики.
-  - Хук/состояние текущей сессии (`user`, `session`).
+- [x] **3. Minimalist Header & Branding**
+  - Created `src/components/Header.tsx`.
+  - Clean title "Polski Helper" (`font-semibold`, 15–16px) on the left (clickable to return to main menu).
+  - Minimalist theme toggle (Lucide `Sun` / `Moon`, stroke 1.75px) on the right.
+  - Removed secondary flag badges and decorative tags.
 
-- [ ] **10. Массовый импорт и управление словарем (Dictionary & Bulk Import)**
-  - Модальное окно «Импорт слов»:
-    - Умный ввод текста с авто-определением формата:
-      - Строки `слово - перевод` или `слово;перевод` (копипаст из ChatGPT/Notion).
-      - Валидный JSON `[{"word":"...", "translation":"..."}]`.
-    - Моментальный парсинг и живой предпросмотр перед отправкой («Найдено: 300 слов»).
-    - Пакетная вставка (Batch insert) в Supabase per user.
-  - Экран личного словаря: список слов, поиск, удаление/редактирование карточек.
+- [x] **4. Main Menu Hub Refactoring**
+  - Strict h1 heading ("Grammar") with concise subtitle.
+  - Module cards in shadcn/ui style without visual noise.
+  - Compact `[ Rule ]` button with `BookOpen` icon in card headers.
+  - Mode selections formatted as flat list rows:
+    - Row title (`font-medium`).
+    - Single-line muted practical example (`text-xs font-mono text-zinc-500`, e.g. `okno → okna`).
+    - Minimalist `ChevronRight` arrow on the right.
+  - Complete removal of rule spoilers and ending chips from menu buttons.
+  - Zero emojis across all views.
 
-- [ ] **11. Тренажер интервального повторения (SRS Flashcards Trainer)**
-  - Запрос слов на сегодня: `next_review_at <= NOW()`.
-  - Фронтенд-карточка Anki-style:
-    - Лицо: польское слово (36px, font-semibold) + кнопка озвучки (TTS).
-    - Подсказка: `<kbd>Space</kbd> перевернуть`.
-    - Оборот: русский перевод + заметки.
-    - Оценка знания с клавиатуры (Linear `<kbd>`-бейджи):
-      - `<kbd>1</kbd> Забыл` (интервал сбрасывается в 0, повтор сегодня).
-      - `<kbd>2</kbd> Трудно` (интервал 1 день).
-      - `<kbd>3</kbd> Помню` (интервал растет: 1 → 3 → 7 → 16 → 35 дней).
-      - `<kbd>4</kbd> Легко` (интервал растет с бонусом).
-  - Расчет интервалов и обновление даты следующего показа в Supabase.
+- [x] **5. Interactive Practice Screens Refactoring**
+  - Tested word: clean typography, `font-semibold` (weight 600), natural kerning.
+  - Answer options in neutral shadcn style (`bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800`).
+  - Hotkeys 1, 2, 3... as Linear-style `<kbd>` badges in top-right corner of each button.
+  - Subtle answer feedback: accent border (`border-emerald-500/60` / `border-rose-500/60`) and 10% background tint (`bg-emerald-500/10` / `bg-rose-500/10`), no solid neon fills.
+  - Rule explanations in a callout block with `border-l-2` without emojis.
+  - Card body non-clickable (navigation strictly via "Next" button or Enter/Space).
 
-- [ ] **12. Интеграция в Главное меню и верификация**
-  - Добавление 4-го модуля «Словарь и повторение» в главное меню с бейджем «На сегодня: X слов».
-  - Полная верификация: регистрация → импорт 300 слов → прогон карточек → проверка обновления интервалов в БД.
+- [x] **6. Fullscreen Grammar Reference Refactoring**
+  - Removed pill-badges around individual words in examples (clean table grid of Polish words and translations).
+  - Warning/caution blocks: callout with `border-l-2 border-amber-500/80`.
+  - Short / Detailed mode segmented control in shadcn tabs style.
+  - Decision flow checklist for instant lookup without nested boxes.
 
-- [ ] **13. Локализация документации на английский язык (English Documentation)**
-  - Полный перевод всех проектных гайдлайнов и документов (`AGENTS.md`, `BACKLOG.md`, `README.md`, комментарии к коду) на строгий английский язык для международной консистентности и наилучшего следования инструкциям агентами.
+- [x] **7. Final Verification, Build & Linter**
+  - Production build verification (`npm run build`).
+  - Linter check (`npm run lint` via `oxlint`) — 0 errors, 0 warnings.
+  - Zero emoji verification across the repository.
+
+---
+
+## Active Epic: Vocabulary & Spaced Repetition (SRS)
+
+Status: **In Implementation (Phase 8 completed, moving to Phase 9)**  
+Backend: **Supabase (PostgreSQL 17 + Auth + Row Level Security)**  
+Learning Methodology: **Spaced Repetition System (SRS, Anki / SM-2 algorithm)**  
+Design System: **AGENTS.md (Developer-grade, Linear/shadcn, zero emojis, zero gamification)**
+
+### Tasks:
+
+- [x] **8. Supabase Database & Security Schema (Data Layer)**
+  - Created `user_words` table: `id` (uuid), `user_id` (uuid), `word` (text), `translation` (text), `notes` (text), `interval_days` (int), `repetition_count` (int), `ease_factor` (numeric 2.5), `next_review_at` (timestamptz), `created_at` (timestamptz).
+  - Created composite index `idx_user_words_review` on `(user_id, next_review_at)`.
+  - Enabled Row Level Security (RLS) with optimized policy `Users can manage only their own words` (`(select auth.uid()) = user_id`) for single-evaluation performance.
+  - Supabase security audit passed with 0 vulnerabilities.
+
+- [ ] **9. Supabase Client & Header Authentication (Auth UI)**
+  - Install `@supabase/supabase-js`.
+  - Configure `.env.local` and `src/utils/supabase.ts` with environment variables.
+  - Add `[ Sign In ]` (Lucide `User` icon) / `[ user@email ]` in Header next to theme toggle.
+  - Minimalist authentication modal (Email + Password) in shadcn Dialog style.
+  - Current user session state hook (`user`, `session`).
+
+- [ ] **10. Bulk Import & Dictionary Management (Dictionary & Bulk Import)**
+  - "Import Words" modal:
+    - Smart text parsing with auto-detected format:
+      - Delimited text lines `word - translation` or `word;translation` (copy-paste from ChatGPT/Notion/Excel).
+      - Valid JSON `[{"word":"...", "translation":"..."}]`.
+    - Instant parsing and live preview before saving ("Found: 300 words, 0 duplicates").
+    - Batch insert into Supabase per user.
+  - Personal dictionary screen: word list, search, delete/edit cards.
+
+- [ ] **11. Spaced Repetition Flashcards Trainer (SRS Flashcards Trainer)**
+  - Query words due for today: `next_review_at <= NOW()`.
+  - Anki-style flashcard interface:
+    - Front: Polish word prominent (36px, `font-semibold`) + TTS audio button.
+    - Cue: `<kbd>Space</kbd> flip`.
+    - Back: translation + grammar notes.
+    - Keyboard rating evaluation (Linear `<kbd>` badges):
+      - `<kbd>1</kbd> Again` (reset interval to 0, review today).
+      - `<kbd>2</kbd> Hard` (interval 1 day).
+      - `<kbd>3</kbd> Good` (interval expands: 1 → 3 → 7 → 16 → 35 days).
+      - `<kbd>4</kbd> Easy` (interval expands with bonus factor).
+  - Calculate intervals and update next review timestamp in Supabase.
+
+- [ ] **12. Main Menu Integration & Verification**
+  - Add 4th module "Vocabulary & Review" to main menu with badge "Due today: X words".
+  - End-to-end verification: registration → import 300 words → card review session → verify interval updates in DB.
+
+- [x] **13. Documentation Localization & Standardization (English)**
+  - Translated all project guidelines and documentation (`AGENTS.md`, `BACKLOG.md`, `README.md`) into professional English.
