@@ -98,14 +98,33 @@ export function triggerHaptic(type: 'success' | 'error' | 'click' = 'click', ena
   }
 }
 
+export function getPolishVoice(): SpeechSynthesisVoice | null {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+    return null;
+  }
+  const voices = window.speechSynthesis.getVoices();
+  return voices.find((v) => v.lang.toLowerCase().startsWith('pl')) || null;
+}
+
+export function hasPolishVoice(): boolean {
+  return Boolean(getPolishVoice());
+}
+
 export function speakPolish(text: string): boolean {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     return false;
   }
+  const polishVoice = getPolishVoice();
+  // Strictly prevent speaking if no genuine Polish voice is installed
+  if (!polishVoice) {
+    return false;
+  }
+
   try {
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'pl-PL';
+    utterance.voice = polishVoice;
+    utterance.lang = polishVoice.lang || 'pl-PL';
     utterance.rate = 0.9;
     window.speechSynthesis.speak(utterance);
     return true;

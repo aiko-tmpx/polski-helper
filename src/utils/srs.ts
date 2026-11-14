@@ -41,9 +41,13 @@ export function calculateNextSRS(
   }
 
   if (rating === 2) {
-    // Hard: interval 1 day, slight penalty to ease
+    // Hard: interval 1 day for new, or slight expansion for reviews
     const newEase = Math.max(1.3, Number((currentEase - 0.15).toFixed(2)));
-    const newInterval = Math.max(1, currentInterval > 0 ? Math.round(currentInterval * 1.2) : 1);
+    const newInterval =
+      currentCount === 0 || currentInterval === 0
+        ? 1
+        : Math.max(currentInterval + 1, Math.round(currentInterval * 1.2));
+
     return {
       interval_days: newInterval,
       repetition_count: currentCount + 1,
@@ -53,14 +57,14 @@ export function calculateNextSRS(
   }
 
   if (rating === 3) {
-    // Good: standard expansion
+    // Good: 2 days for initial new word, 4 for second step, then exponential expansion
     let newInterval: number;
     if (currentCount === 0 || currentInterval === 0) {
-      newInterval = 1;
+      newInterval = 2;
     } else if (currentCount === 1) {
-      newInterval = 3;
+      newInterval = 4;
     } else {
-      newInterval = Math.max(4, Math.round(currentInterval * currentEase));
+      newInterval = Math.max(currentInterval + 2, Math.round(currentInterval * currentEase));
     }
 
     return {
@@ -71,15 +75,15 @@ export function calculateNextSRS(
     };
   }
 
-  // rating === 4: Easy
+  // rating === 4: Easy: 4 days immediately for new word, then aggressive expansion
   const newEase = Number((currentEase + 0.15).toFixed(2));
   let newInterval: number;
   if (currentCount === 0 || currentInterval === 0) {
-    newInterval = 2;
+    newInterval = 4;
   } else if (currentCount === 1) {
-    newInterval = 5;
+    newInterval = 7;
   } else {
-    newInterval = Math.max(6, Math.round(currentInterval * currentEase * 1.3));
+    newInterval = Math.max(currentInterval + 3, Math.round(currentInterval * currentEase * 1.3));
   }
 
   return {

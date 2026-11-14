@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { User } from '@supabase/supabase-js';
 import type { UserWord } from '../types';
 import { supabase } from '../utils/supabase';
-import { speakPolish } from '../utils/audio';
+import { speakPolish, hasPolishVoice } from '../utils/audio';
 import { calculateNextSRS, type SRSRating } from '../utils/srs';
 import { ArrowLeft, Volume2, Loader2, RotateCcw, Check } from 'lucide-react';
 
@@ -25,6 +25,20 @@ export const SRSTrainer: React.FC<SRSTrainerProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isPracticeAll, setIsPracticeAll] = useState(false);
+  const [hasPolishTts, setHasPolishTts] = useState(() => hasPolishVoice());
+
+  // Detect genuine Polish voice support (handles async voice loading in Chromium)
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    const updateVoice = () => {
+      setHasPolishTts(hasPolishVoice());
+    };
+    updateVoice();
+    window.speechSynthesis.addEventListener('voiceschanged', updateVoice);
+    return () => {
+      window.speechSynthesis.removeEventListener('voiceschanged', updateVoice);
+    };
+  }, []);
 
   // Fetch words due for review today
   useEffect(() => {
@@ -75,12 +89,12 @@ export const SRSTrainer: React.FC<SRSTrainerProps> = ({
 
   const currentWord = queue[0];
 
-  // Auto-pronounce word when card appears
+  // Auto-pronounce word when card appears only if Polish TTS is supported
   useEffect(() => {
-    if (currentWord) {
+    if (currentWord && hasPolishTts) {
       speakPolish(currentWord.word);
     }
-  }, [currentWord]);
+  }, [currentWord, hasPolishTts]);
 
   // Flip card
   const handleFlip = useCallback(() => {
@@ -180,21 +194,6 @@ export const SRSTrainer: React.FC<SRSTrainerProps> = ({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isFlipped, isSaving, currentWord, handleFlip, handleRate]);
-
-  // Projected intervals for buttons preview
-  const buttonIntervals = useMemo(() => {
-    if (!currentWord) return { again: '< 10м', hard: '1 дн.', good: '3 дн.', easy: '5 дн.' };
-    const hardResult = calculateNextSRS(currentWord, 2);
-    const goodResult = calculateNextSRS(currentWord, 3);
-    const easyResult = calculateNextSRS(currentWord, 4);
-
-    return {
-      again: '< 10м',
-      hard: `${hardResult.interval_days} дн.`,
-      good: `${goodResult.interval_days} дн.`,
-      easy: `${easyResult.interval_days} дн.`,
-    };
-  }, [currentWord]);
 
   // Unauthenticated screen
   if (!user) {
@@ -366,18 +365,20 @@ export const SRSTrainer: React.FC<SRSTrainerProps> = ({
           !isFlipped ? 'cursor-pointer hover:border-zinc-300 dark:hover:border-zinc-700' : ''
         }`}
       >
-        {/* Audio Button */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            if (currentWord) speakPolish(currentWord.word);
-          }}
-          title="Прослушать произношение [R]"
-          className="absolute top-4 right-4 p-2 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-        >
-          <Volume2 className="w-4 h-4" strokeWidth={1.75} />
-        </button>
+        {/* Audio Button (rendered strictly when Polish voice is supported) */}
+        {hasPolishTts && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (currentWord) speakPolish(currentWord.word);
+            }}
+            title="Прослушать произношение [R]"
+            className="absolute top-4 right-4 p-2 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+          >
+            <Volume2 className="w-4 h-4" strokeWidth={1.75} />
+          </button>
+        )}
 
         {/* Front Side: Polish Word */}
         <div className="w-full flex flex-col items-center">
@@ -385,14 +386,7 @@ export const SRSTrainer: React.FC<SRSTrainerProps> = ({
             {currentWord.word}
           </div>
 
-          {!isFlipped ? (
-            <div className="mt-8 flex items-center gap-2 text-xs text-zinc-400">
-              <span>Нажмите для перевода</span>
-              <kbd className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700">
-                Space
-              </kbd>
-            </div>
-          ) : (
+          {isFlipped && (
             <>
               {/* Divider */}
               <div className="w-12 h-px bg-zinc-200 dark:bg-zinc-800 my-4" />
@@ -426,72 +420,52 @@ export const SRSTrainer: React.FC<SRSTrainerProps> = ({
 
           {/* 4 Linear-style Rating Buttons */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {/* 1. Again */}
+            {/* 1. Не помню */}
             <button
               onClick={() => handleRate(1)}
               disabled={isSaving}
-              className="flex flex-col items-center justify-center p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-rose-500/50 hover:bg-rose-500/10 text-zinc-900 dark:text-zinc-100 transition-all active:scale-98 disabled:opacity-50 group"
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-rose-500/50 hover:bg-rose-500/10 text-xs font-semibold text-rose-600 dark:text-rose-400 transition-all active:scale-98 disabled:opacity-50"
             >
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400">
-                <kbd className="font-mono text-[10px] px-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
-                  1
-                </kbd>
-                <span>Снова</span>
-              </div>
-              <span className="text-[10px] font-mono text-zinc-400 mt-0.5">
-                {buttonIntervals.again}
-              </span>
+              <kbd className="font-mono text-[10px] px-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
+                1
+              </kbd>
+              <span>Не помню</span>
             </button>
 
-            {/* 2. Hard */}
+            {/* 2. Трудно */}
             <button
               onClick={() => handleRate(2)}
               disabled={isSaving}
-              className="flex flex-col items-center justify-center p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-amber-500/50 hover:bg-amber-500/10 text-zinc-900 dark:text-zinc-100 transition-all active:scale-98 disabled:opacity-50 group"
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-amber-500/50 hover:bg-amber-500/10 text-xs font-semibold text-amber-600 dark:text-amber-400 transition-all active:scale-98 disabled:opacity-50"
             >
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
-                <kbd className="font-mono text-[10px] px-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
-                  2
-                </kbd>
-                <span>Трудно</span>
-              </div>
-              <span className="text-[10px] font-mono text-zinc-400 mt-0.5">
-                {buttonIntervals.hard}
-              </span>
+              <kbd className="font-mono text-[10px] px-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
+                2
+              </kbd>
+              <span>Трудно</span>
             </button>
 
-            {/* 3. Good */}
+            {/* 3. Хорошо */}
             <button
               onClick={() => handleRate(3)}
               disabled={isSaving}
-              className="flex flex-col items-center justify-center p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-zinc-900 dark:text-zinc-100 transition-all active:scale-98 disabled:opacity-50 group"
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-xs font-semibold text-emerald-600 dark:text-emerald-400 transition-all active:scale-98 disabled:opacity-50"
             >
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                <kbd className="font-mono text-[10px] px-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
-                  3
-                </kbd>
-                <span>Хорошо</span>
-              </div>
-              <span className="text-[10px] font-mono text-zinc-400 mt-0.5">
-                {buttonIntervals.good}
-              </span>
+              <kbd className="font-mono text-[10px] px-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
+                3
+              </kbd>
+              <span>Хорошо</span>
             </button>
 
-            {/* 4. Easy */}
+            {/* 4. Легко */}
             <button
               onClick={() => handleRate(4)}
               disabled={isSaving}
-              className="flex flex-col items-center justify-center p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-sky-500/50 hover:bg-sky-500/10 text-zinc-900 dark:text-zinc-100 transition-all active:scale-98 disabled:opacity-50 group"
+              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:border-sky-500/50 hover:bg-sky-500/10 text-xs font-semibold text-sky-600 dark:text-sky-400 transition-all active:scale-98 disabled:opacity-50"
             >
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-sky-600 dark:text-sky-400">
-                <kbd className="font-mono text-[10px] px-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
-                  4
-                </kbd>
-                <span>Легко</span>
-              </div>
-              <span className="text-[10px] font-mono text-zinc-400 mt-0.5">
-                {buttonIntervals.easy}
-              </span>
+              <kbd className="font-mono text-[10px] px-1 rounded bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300">
+                4
+              </kbd>
+              <span>Легко</span>
             </button>
           </div>
         </div>

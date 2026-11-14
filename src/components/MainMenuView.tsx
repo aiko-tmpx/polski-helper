@@ -41,25 +41,6 @@ export const MainMenuView: React.FC<MainMenuViewProps> = ({ onNavigate, user }) 
     };
   }, [user]);
 
-  // Handle Space key on home screen to trigger review if words due
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.code === 'Space' &&
-        reviewCount !== null &&
-        reviewCount > 0 &&
-        document.activeElement?.tagName !== 'INPUT' &&
-        document.activeElement?.tagName !== 'TEXTAREA'
-      ) {
-        e.preventDefault();
-        onNavigate('srs-trainer');
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [reviewCount, onNavigate]);
-
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-8 sm:py-10 flex flex-col gap-6 animate-fadeIn">
       {/* 1. Daily Action / Review Banner */}
@@ -79,9 +60,6 @@ export const MainMenuView: React.FC<MainMenuViewProps> = ({ onNavigate, user }) 
               className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-white text-xs font-semibold transition-colors shadow-xs active:scale-98 shrink-0"
             >
               <span>Повторить</span>
-              <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded font-mono text-[10px] bg-zinc-800 text-zinc-200 dark:bg-zinc-200 dark:text-zinc-800 border border-zinc-700 dark:border-zinc-300">
-                Space
-              </kbd>
             </button>
           </div>
         ) : (
