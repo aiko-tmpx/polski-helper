@@ -6,6 +6,7 @@ import { Header } from './components/Header';
 import { AuthScreen } from './components/AuthScreen';
 import { MainMenuView } from './components/MainMenuView';
 import { DictionaryScreen } from './components/DictionaryScreen';
+import { SRSTrainer } from './components/SRSTrainer';
 import { GenderModule } from './components/GenderModule';
 import { PluralModule } from './components/PluralModule';
 import { VirileModule } from './components/VirileModule';
@@ -97,6 +98,15 @@ export const App: React.FC = () => {
             user={user}
             onNavigateToAuth={() => navigateTo('auth')}
             onBackToMenu={() => setCurrentScreen('menu')}
+          />
+        )}
+
+        {/* 1.2 Spaced Repetition Flashcards Trainer */}
+        {currentScreen === 'srs-trainer' && (
+          <SRSTrainer
+            user={user}
+            onBackToMenu={() => setCurrentScreen('menu')}
+            onNavigateToAuth={() => navigateTo('auth')}
           />
         )}
 

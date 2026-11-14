@@ -95,7 +95,7 @@ Design System: **AGENTS.md (Developer-grade, Linear/shadcn, zero emojis, zero ga
     - Chunked batch insert into Supabase `user_words` table.
   - Completely eliminated box-in-a-box nested borders across main menu cards.
 
-- [ ] **11. Spaced Repetition Flashcards Trainer (SRS Flashcards Trainer)**
+- [x] **11. Spaced Repetition Flashcards Trainer (SRS Flashcards Trainer)**
   - Query words due for today: `next_review_at <= NOW()`.
   - Anki-style flashcard interface:
     - Front: Polish word prominent (36px, `font-semibold`) + TTS audio button.
