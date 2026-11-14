@@ -5,6 +5,7 @@ import { supabase } from './utils/supabase';
 import { Header } from './components/Header';
 import { AuthScreen } from './components/AuthScreen';
 import { MainMenuView } from './components/MainMenuView';
+import { DictionaryScreen } from './components/DictionaryScreen';
 import { GenderModule } from './components/GenderModule';
 import { PluralModule } from './components/PluralModule';
 import { VirileModule } from './components/VirileModule';
@@ -72,6 +73,8 @@ export const App: React.FC = () => {
         onOpenAuth={() => navigateTo('auth')}
         onSignOut={handleSignOut}
         isAuthScreen={currentScreen === 'auth'}
+        activeTab={currentScreen === 'dictionary' ? 'dictionary' : 'practice'}
+        onNavigateTab={(tab) => navigateTo(tab === 'dictionary' ? 'dictionary' : 'menu')}
       />
 
       <main className="flex-1 flex flex-col">
@@ -83,9 +86,18 @@ export const App: React.FC = () => {
           />
         )}
 
-        {/* 1. Main Menu Hub */}
+        {/* 1. Main Menu Hub (Practice) */}
         {currentScreen === 'menu' && (
-          <MainMenuView onNavigate={navigateTo} />
+          <MainMenuView onNavigate={navigateTo} user={user} />
+        )}
+
+        {/* 1.1 Dictionary & Vocabulary Library */}
+        {currentScreen === 'dictionary' && (
+          <DictionaryScreen
+            user={user}
+            onNavigateToAuth={() => navigateTo('auth')}
+            onBackToMenu={() => setCurrentScreen('menu')}
+          />
         )}
 
         {/* 2. Gender Training */}

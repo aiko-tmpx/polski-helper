@@ -1,5 +1,7 @@
 export type ScreenState =
   | 'menu'
+  | 'dictionary'
+  | 'srs-trainer'
   | 'auth'
   | 'train-gender'
   | 'train-plural-nouns'

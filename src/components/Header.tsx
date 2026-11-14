@@ -11,6 +11,8 @@ interface HeaderProps {
   onOpenAuth?: () => void;
   onSignOut?: () => void;
   isAuthScreen?: boolean;
+  activeTab?: 'practice' | 'dictionary';
+  onNavigateTab?: (tab: 'practice' | 'dictionary') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -21,16 +23,45 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAuth,
   onSignOut,
   isAuthScreen,
+  activeTab = 'practice',
+  onNavigateTab,
 }) => {
   return (
     <header className="sticky top-0 z-30 w-full border-b border-zinc-200 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm transition-colors duration-150">
       <div className="max-w-2xl mx-auto px-4 h-13 sm:h-14 flex items-center justify-between">
-        <button
-          onClick={onLogoClick}
-          className="text-[15px] font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 rounded"
-        >
-          Polski Helper
-        </button>
+        <div className="flex items-center gap-4 sm:gap-6">
+          <button
+            onClick={onLogoClick}
+            className="text-[15px] font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 hover:opacity-80 transition-opacity focus:outline-none focus-visible:ring-1 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 rounded"
+          >
+            Polski Helper
+          </button>
+
+          {!isAuthScreen && onNavigateTab && (
+            <nav className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-900 p-0.5 rounded-lg border border-zinc-200/60 dark:border-zinc-800/60 text-xs">
+              <button
+                onClick={() => onNavigateTab('practice')}
+                className={`px-2.5 py-1 rounded-md transition-all font-medium ${
+                  activeTab === 'practice'
+                    ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-2xs font-semibold'
+                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+                }`}
+              >
+                Тренировки
+              </button>
+              <button
+                onClick={() => onNavigateTab('dictionary')}
+                className={`px-2.5 py-1 rounded-md transition-all font-medium ${
+                  activeTab === 'dictionary'
+                    ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-2xs font-semibold'
+                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+                }`}
+              >
+                Словарь
+              </button>
+            </nav>
+          )}
+        </div>
 
         <div className="flex items-center gap-2">
           {/* User Auth Controls */}
