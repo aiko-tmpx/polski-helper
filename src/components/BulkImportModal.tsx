@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Loader2, Upload } from 'lucide-react';
 import { supabase } from '../utils/supabase';
 
@@ -13,6 +14,7 @@ interface BulkImportModalProps {
   onClose: () => void;
   onSuccess: () => void;
   userId: string;
+  existingWords?: string[];
 }
 
 export const BulkImportModal: React.FC<BulkImportModalProps> = ({
@@ -20,10 +22,28 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
   onClose,
   onSuccess,
   userId,
+  existingWords = [],
 }) => {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !isLoading) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isLoading, onClose]);
+
+  // Set of already saved words for case-insensitive duplicate check
+  const existingSet = useMemo(() => {
+    return new Set(existingWords.map((w) => w.trim().toLowerCase()));
+  }, [existingWords]);
 
   // Parse lines or JSON in real time
   const parsedWords = useMemo<ParsedWord[]>(() => {
@@ -52,6 +72,7 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
     // 2. Line by line parsing with common delimiters: " - ", " — ", ";", "\t"
     const lines = trimmed.split('\n');
     const result: ParsedWord[] = [];
+    const seenInBatch = new Set<string>();
 
     for (const rawLine of lines) {
       const line = rawLine.trim();
@@ -85,27 +106,54 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
       }
 
       if (word) {
-        result.push({
-          word,
-          translation: translation || '—',
-          notes,
-        });
+        const lower = word.toLowerCase();
+        // Skip duplicate occurrences within the same pasted text
+        if (!seenInBatch.has(lower)) {
+          seenInBatch.add(lower);
+          result.push({
+            word,
+            translation: translation || '—',
+            notes,
+          });
+        }
       }
     }
 
     return result;
   }, [inputText]);
 
+  // Split into new words and words already existing in the dictionary
+  const { newWords, duplicateCount } = useMemo(() => {
+    const newItems: ParsedWord[] = [];
+    let dups = 0;
+
+    for (const item of parsedWords) {
+      if (existingSet.has(item.word.toLowerCase())) {
+        dups++;
+      } else {
+        newItems.push(item);
+      }
+    }
+
+    return { newWords: newItems, duplicateCount: dups };
+  }, [parsedWords, existingSet]);
+
   if (!isOpen) return null;
 
   const handleImport = async () => {
-    if (parsedWords.length === 0) return;
+    if (newWords.length === 0) {
+      if (duplicateCount > 0) {
+        setErrorMessage('Все распознанные слова уже есть в словаре');
+      }
+      return;
+    }
+
     setIsLoading(true);
     setErrorMessage(null);
 
     try {
       const now = new Date().toISOString();
-      const rows = parsedWords.map((item) => ({
+      const rows = newWords.map((item) => ({
         user_id: userId,
         word: item.word,
         translation: item.translation,
@@ -140,9 +188,19 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
-      <div className="w-full max-w-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-xl flex flex-col gap-4">
+  return createPortal(
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !isLoading) {
+          onClose();
+        }
+      }}
+    >
+      <div
+        className="w-full max-w-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-xl flex flex-col gap-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
           <div>
@@ -155,8 +213,9 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
           </div>
           <button
             onClick={onClose}
+            disabled={isLoading}
             aria-label="Закрыть"
-            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors disabled:opacity-50"
           >
             <X className="w-4 h-4" strokeWidth={1.75} />
           </button>
@@ -179,15 +238,20 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
             {parsedWords.length > 0 ? (
               <span className="text-emerald-600 dark:text-emerald-400 font-medium">
                 Распознано: {parsedWords.length} слов
+                {duplicateCount > 0 && (
+                  <span className="text-zinc-400 dark:text-zinc-500 ml-1.5 font-normal">
+                    (новых: {newWords.length}, уже в словаре: {duplicateCount})
+                  </span>
+                )}
               </span>
             ) : (
               <span>Строк пока не обнаружено</span>
             )}
           </div>
 
-          {parsedWords.length > 0 && (
+          {newWords.length > 0 && (
             <span className="text-zinc-400 dark:text-zinc-500 truncate max-w-[200px]">
-              Пример: {parsedWords[0].word} → {parsedWords[0].translation}
+              Пример: {newWords[0].word} → {newWords[0].translation}
             </span>
           )}
         </div>
@@ -212,7 +276,7 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
           <button
             type="button"
             onClick={handleImport}
-            disabled={isLoading || parsedWords.length === 0}
+            disabled={isLoading || newWords.length === 0}
             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-white text-xs font-medium transition-colors disabled:opacity-50 active:scale-98 shadow-xs"
           >
             {isLoading ? (
@@ -221,11 +285,16 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
               <Upload className="w-3.5 h-3.5" strokeWidth={1.75} />
             )}
             <span>
-              {parsedWords.length > 0 ? `Импортировать ${parsedWords.length} слов` : 'Импортировать'}
+              {newWords.length > 0
+                ? `Импортировать ${newWords.length} слов`
+                : duplicateCount > 0
+                ? 'Слова уже в словаре'
+                : 'Импортировать'}
             </span>
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

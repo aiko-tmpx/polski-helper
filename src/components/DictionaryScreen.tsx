@@ -369,6 +369,7 @@ export const DictionaryScreen: React.FC<DictionaryScreenProps> = ({
           onClose={() => setIsImportModalOpen(false)}
           onSuccess={fetchWords}
           userId={user.id}
+          existingWords={words.map((w) => w.word)}
         />
       )}
     </div>
