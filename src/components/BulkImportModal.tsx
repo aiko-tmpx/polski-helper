@@ -128,7 +128,12 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
       onSuccess();
       onClose();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Ошибка при сохранении слов в базу';
+      let msg = 'Ошибка при сохранении слов в базу';
+      if (err && typeof err === 'object' && 'message' in err && typeof (err as { message: unknown }).message === 'string') {
+        msg = (err as { message: string }).message;
+      } else if (err instanceof Error) {
+        msg = err.message;
+      }
       setErrorMessage(msg);
     } finally {
       setIsLoading(false);
