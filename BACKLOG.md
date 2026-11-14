@@ -85,14 +85,16 @@ Design System: **AGENTS.md (Developer-grade, Linear/shadcn, zero emojis, zero ga
   - Built dedicated full-page authentication screen (`src/components/AuthScreen.tsx`) supporting clean Email + Password with mode switcher (`Sign In` / `Sign Up`).
   - Integrated active session listener in `src/App.tsx`.
 
-- [ ] **10. Bulk Import & Dictionary Management (Dictionary & Bulk Import)**
-  - "Import Words" modal:
+- [ ] **10. App Shell Architecture & Dictionary Management (App Shell & Vocabulary)**
+  - Implement top-level App Shell navigation in Header (`Practice` / `Dictionary`):
+    - `Practice`: Active drills hub (daily review queue + grammar modules).
+    - `Dictionary`: Dedicated library screen with search, word list, single word addition, and delete actions.
+  - "Import Words" modal / screen:
     - Smart text parsing with auto-detected format:
       - Delimited text lines `word - translation` or `word;translation` (copy-paste from ChatGPT/Notion/Excel).
       - Valid JSON `[{"word":"...", "translation":"..."}]`.
-    - Instant parsing and live preview before saving ("Found: 300 words, 0 duplicates").
+    - Instant live preview before saving ("Found: 300 words, 0 duplicates").
     - Batch insert into Supabase per user.
-  - Personal dictionary screen: word list, search, delete/edit cards.
 
 - [ ] **11. Spaced Repetition Flashcards Trainer (SRS Flashcards Trainer)**
   - Query words due for today: `next_review_at <= NOW()`.
@@ -107,9 +109,13 @@ Design System: **AGENTS.md (Developer-grade, Linear/shadcn, zero emojis, zero ga
       - `<kbd>4</kbd> Easy` (interval expands with bonus factor).
   - Calculate intervals and update next review timestamp in Supabase.
 
-- [ ] **12. Main Menu Integration & Verification**
-  - Add 4th module "Vocabulary & Review" to main menu with badge "Due today: X words".
-  - End-to-end verification: registration → import 300 words → card review session → verify interval updates in DB.
+- [ ] **12. End-to-End Testing & Verification**
+  - Verify complete loop: registration → import 300 words → card review session → verify interval updates in DB.
+  - Production build & Oxlint verification.
 
 - [x] **13. Documentation Localization & Standardization (English)**
   - Translated all project guidelines and documentation (`AGENTS.md`, `BACKLOG.md`, `README.md`) into professional English.
+
+- [ ] **14. Design System Enhancement: Mobbin UI Pattern Integration**
+  - Connect Mobbin plugin (`antigravity-plugins-partners/plugin/mobbin`) for production mobile/web design patterns (Anki, Quizlet, Duolingo, Linear).
+  - Audit and refine interactive flashcard transitions and dictionary layout against top-tier language learning applications.
