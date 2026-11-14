@@ -71,14 +71,25 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
         parts = line.split(':');
       }
 
-      if (parts.length >= 2) {
-        const word = parts[0].trim();
-        const translation = parts[1].trim();
-        const notes = parts.slice(2).join(' ').trim() || undefined;
+      let word = '';
+      let translation = '';
+      let notes: string | undefined;
 
-        if (word && translation) {
-          result.push({ word, translation, notes });
-        }
+      if (parts.length >= 2) {
+        word = parts[0].trim();
+        translation = parts[1].trim();
+        notes = parts.slice(2).join(' ').trim() || undefined;
+      } else {
+        // Line without delimiter or with trailing delimiter like "polski - "
+        word = line.replace(/[\s\-—:;.]+$/, '').trim();
+      }
+
+      if (word) {
+        result.push({
+          word,
+          translation: translation || '—',
+          notes,
+        });
       }
     }
 
@@ -134,7 +145,7 @@ export const BulkImportModal: React.FC<BulkImportModalProps> = ({
               Массовый импорт слов
             </h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Вставьте строки вида <code className="font-mono text-zinc-700 dark:text-zinc-300">слово - перевод</code> или JSON
+              Вставьте строки <code className="font-mono text-zinc-700 dark:text-zinc-300">слово - перевод</code> или просто список слов
             </p>
           </div>
           <button
