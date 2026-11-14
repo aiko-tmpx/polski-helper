@@ -108,9 +108,9 @@ Design System: **AGENTS.md (Developer-grade, Linear/shadcn, zero emojis, zero ga
       - `<kbd>4</kbd> Easy` (interval expands with bonus factor).
   - Calculate intervals and update next review timestamp in Supabase.
 
-- [ ] **12. End-to-End Testing & Verification**
-  - Verify complete loop: registration → import 300 words → card review session → verify interval updates in DB.
-  - Production build & Oxlint verification.
+- [x] **12. End-to-End Testing & Verification**
+  - Verify complete loop: registration → word addition / import → card review session → verify interval updates in DB.
+  - Production build & Oxlint verification (0 errors, 0 warnings).
 
 - [x] **13. Documentation Localization & Standardization (English)**
   - Translated all project guidelines and documentation (`AGENTS.md`, `BACKLOG.md`, `README.md`) into professional English.
