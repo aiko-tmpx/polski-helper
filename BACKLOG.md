@@ -85,16 +85,15 @@ Design System: **AGENTS.md (Developer-grade, Linear/shadcn, zero emojis, zero ga
   - Built dedicated full-page authentication screen (`src/components/AuthScreen.tsx`) supporting clean Email + Password with mode switcher (`Sign In` / `Sign Up`).
   - Integrated active session listener in `src/App.tsx`.
 
-- [ ] **10. App Shell Architecture & Dictionary Management (App Shell & Vocabulary)**
-  - Implement top-level App Shell navigation in Header (`Practice` / `Dictionary`):
-    - `Practice`: Active drills hub (daily review queue + grammar modules).
-    - `Dictionary`: Dedicated library screen with search, word list, single word addition, and delete actions.
-  - "Import Words" modal / screen:
-    - Smart text parsing with auto-detected format:
-      - Delimited text lines `word - translation` or `word;translation` (copy-paste from ChatGPT/Notion/Excel).
-      - Valid JSON `[{"word":"...", "translation":"..."}]`.
-    - Instant live preview before saving ("Found: 300 words, 0 duplicates").
-    - Batch insert into Supabase per user.
+- [x] **10. App Shell Architecture & Dictionary Management (App Shell & Vocabulary)**
+  - Implemented top-level App Shell navigation in Header (`Practice` / `Dictionary`):
+    - `Practice`: Active drills hub (daily review queue banner + grammar modules).
+    - `Dictionary`: Dedicated library screen with real-time search, word count, single word addition, and delete actions.
+  - "Import Words" modal (`BulkImportModal.tsx`):
+    - Smart text parsing supporting delimited lines (`word - translation`, `word;translation`, tabs) and JSON.
+    - Instant live preview before saving ("Found: X words").
+    - Chunked batch insert into Supabase `user_words` table.
+  - Completely eliminated box-in-a-box nested borders across main menu cards.
 
 - [ ] **11. Spaced Repetition Flashcards Trainer (SRS Flashcards Trainer)**
   - Query words due for today: `next_review_at <= NOW()`.
